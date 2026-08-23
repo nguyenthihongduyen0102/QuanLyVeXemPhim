@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MovieRepository {
 
-    private static final String FILE_PATH = "src/data/movies.txt";
+    private static final String FILE_PATH = "data/movies.txt";
 
     public List<Movie> getAllMovies() {
         List<Movie> movies = new ArrayList<>();

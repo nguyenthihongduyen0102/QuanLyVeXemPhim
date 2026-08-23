@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ShowtimeRepository {
 
-    private static final String FILE_PATH = "src/data/showtimes.txt";
+    private static final String FILE_PATH = "data/showtimes.txt";
 
     private final MovieRepository movieRepository;
 
@@ -107,11 +107,12 @@ public class ShowtimeRepository {
 
         for (Showtime showtime : showtimes) {
 
-            if (showtime.getId()
-                    .equalsIgnoreCase(showtimeId)) {
-
-                return showtime;
+            if (!Boolean.parseBoolean(showtime.getId()
+                    .toString())) {
+                continue;
             }
+
+            return showtime;
         }
 
         return null;
