@@ -1,5 +1,0 @@
-CR01,Phòng 1,100
-CR02,Phòng 2,80
-CR03,Phòng 3,120
-CR05,Phòng 5,90
-CR10,Phòng 10,150

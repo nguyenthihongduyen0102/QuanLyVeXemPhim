@@ -1,5 +1,0 @@
-M001,Avengers: Endgame,Hành động,181,13,Đang chiếu
-M002,Spider-Man: No Way Home,Hành động,148,13,Đang chiếu
-M003,Frozen II,Hoạt hình,103,P,Đang chiếu
-M004,Conan Movie 27,Bí ẩn,111,13,Đang chiếu
-M005,Inside Out 2,Hoạt hình,96,P,Ngừng chiếu
