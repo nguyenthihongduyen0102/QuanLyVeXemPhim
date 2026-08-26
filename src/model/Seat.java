@@ -63,5 +63,4 @@ public class Seat {
     public double getSurcharge(){
         return this.typeOfSeat != null ? this.typeOfSeat.getSurcharge() : 0.0;
     }
-    //...//
 }

@@ -13,4 +13,3 @@ public class VIPCustomerPricePolicy implements TicketPricePolicy {
         return FinalSum;
     }
 }
-//..//
