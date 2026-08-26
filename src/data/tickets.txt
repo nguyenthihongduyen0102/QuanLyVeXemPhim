@@ -1,0 +1,5 @@
+TK001,Nguyễn Thị Hồng Duyên,Avengers: Endgame,08:00 - 11:01,NORMAL,72000,PAID
+TK002,Le Van Cuong,Spider-Man: No Way Home,18:00 - 20:28,VIP,155000,PAID
+TK003,Tran Thi Binh,Frozen II,19:00 - 20:43,NORMAL,68000,UNPAID
+TK004,Pham Minh Dung,Conan Movie 27,18:00 - 19:51,COUPLE,76000,UNPAID
+TK005,Hoang Anh Tuan,Avengers: Endgame,08:00 - 11:01,VIP,150000,PAID
