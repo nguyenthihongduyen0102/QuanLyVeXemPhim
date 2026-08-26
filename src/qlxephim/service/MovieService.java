@@ -1,22 +1,118 @@
-package qlxephim.service;
+package service;
 
-import qlxephim.model.Movie;
-import qlxephim.model.Showtime;
-import qlxephim.repository.MovieRepository;
-import qlxephim.repository.ShowtimeRepository;
+import model.Movie;
+import model.Showtime;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovieService {
 
-    private final MovieRepository movieRepository;
-    private final ShowtimeRepository showtimeRepository;
+    private final List<Movie> movies;
+    private final List<Showtime> showtimes;
 
     public MovieService() {
 
-        movieRepository = new MovieRepository();
-        showtimeRepository = new ShowtimeRepository();
+        movies = new ArrayList<>();
+        showtimes = new ArrayList<>();
+
+        createSampleData();
+    }
+
+    /*
+     * Tạo dữ liệu mẫu.
+     */
+    private void createSampleData() {
+
+        Movie movie1 = new Movie(
+                "M01",
+                "Avengers: Endgame",
+                181,
+                "Action",
+                "T13",
+                "Đang chiếu"
+        );
+
+        Movie movie2 = new Movie(
+                "M02",
+                "The Conjuring",
+                112,
+                "Horror",
+                "T18",
+                "Đang chiếu"
+        );
+
+        Movie movie3 = new Movie(
+                "M03",
+                "Inside Out 2",
+                100,
+                "Animation",
+                "P",
+                "Sắp chiếu"
+        );
+
+        Movie movie4 = new Movie(
+                "M04",
+                "Interstellar",
+                169,
+                "Sci-Fi",
+                "T13",
+                "Đã kết thúc"
+        );
+
+        movies.add(movie1);
+        movies.add(movie2);
+        movies.add(movie3);
+        movies.add(movie4);
+
+        // Phòng chiếu
+        var room1 = new qlxemphim.model.CinemaRoom(
+                "R01",
+                "Phòng 1",
+                100
+        );
+
+        var room2 = new qlxemphim.model.CinemaRoom(
+                "R02",
+                "Phòng 2",
+                80
+        );
+
+        /*
+         * Có thể thêm Showtime trực tiếp vào danh sách.
+         */
+        java.time.LocalDateTime now =
+                java.time.LocalDateTime.now();
+
+        showtimes.add(
+                new Showtime(
+                        "ST01",
+                        movie1,
+                        room1,
+                        now.minusMinutes(30),
+                        now.plusMinutes(150)
+                )
+        );
+
+        showtimes.add(
+                new Showtime(
+                        "ST02",
+                        movie2,
+                        room2,
+                        now.plusHours(2),
+                        now.plusHours(4)
+                )
+        );
+
+        showtimes.add(
+                new Showtime(
+                        "ST03",
+                        movie4,
+                        room1,
+                        now.minusHours(4),
+                        now.minusHours(1)
+                )
+        );
     }
 
     /*
@@ -24,7 +120,7 @@ public class MovieService {
      */
     public List<Movie> getAllMovies() {
 
-        return movieRepository.getAllMovies();
+        return new ArrayList<>(movies);
     }
 
     /*
@@ -33,8 +129,7 @@ public class MovieService {
      * Không phân biệt chữ hoa/chữ thường.
      * Có thể tìm một phần tên.
      */
-    public List<Movie> searchMovieByName(
-            String keyword) {
+    public List<Movie> searchMovieByName(String keyword) {
 
         List<Movie> result = new ArrayList<>();
 
@@ -47,8 +142,7 @@ public class MovieService {
         String searchKeyword =
                 keyword.trim().toLowerCase();
 
-        for (Movie movie :
-                movieRepository.getAllMovies()) {
+        for (Movie movie : movies) {
 
             if (movie.getTitle()
                     .toLowerCase()
@@ -63,16 +157,14 @@ public class MovieService {
 
     /*
      * 3. Kiểm tra một phim có đang chiếu hay không.
-     *
-     * Một phim đang chiếu nếu có ít nhất
-     * một Showtime đang active.
      */
     public boolean isMovieShowing(String movieId) {
 
-        List<Showtime> showtimes =
-                showtimeRepository.getAllShowtimes();
-
         for (Showtime showtime : showtimes) {
+
+            if (showtime.getMovie() == null) {
+                continue;
+            }
 
             boolean sameMovie =
                     showtime.getMovie()
@@ -94,9 +186,6 @@ public class MovieService {
 
         List<Movie> result = new ArrayList<>();
 
-        List<Movie> movies =
-                movieRepository.getAllMovies();
-
         for (Movie movie : movies) {
 
             if (isMovieShowing(movie.getId())) {
@@ -112,7 +201,20 @@ public class MovieService {
      */
     public Movie findById(String movieId) {
 
-        return movieRepository.findById(movieId);
+        if (movieId == null) {
+            return null;
+        }
+
+        for (Movie movie : movies) {
+
+            if (movie.getId()
+                    .equalsIgnoreCase(movieId)) {
+
+                return movie;
+            }
+        }
+
+        return null;
     }
 
     /*
@@ -123,8 +225,15 @@ public class MovieService {
 
         List<Showtime> result = new ArrayList<>();
 
-        for (Showtime showtime :
-                showtimeRepository.getAllShowtimes()) {
+        if (movieId == null) {
+            return result;
+        }
+
+        for (Showtime showtime : showtimes) {
+
+            if (showtime.getMovie() == null) {
+                continue;
+            }
 
             if (showtime.getMovie()
                     .getId()

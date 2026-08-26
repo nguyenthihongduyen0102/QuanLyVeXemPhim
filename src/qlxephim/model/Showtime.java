@@ -1,8 +1,10 @@
-package qlxephim.model;
+package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Showtime {
+
     private String id;
     private Movie movie;
     private CinemaRoom cinemaRoom;
@@ -23,6 +25,7 @@ public class Showtime {
         this.endTime = endTime;
     }
 
+    // Getter
     public String getId() {
         return id;
     }
@@ -43,6 +46,7 @@ public class Showtime {
         return endTime;
     }
 
+    // Setter
     public void setId(String id) {
         this.id = id;
     }
@@ -64,39 +68,50 @@ public class Showtime {
     }
 
     /*
-     * Suất chiếu đang hoạt động khi thời điểm hiện tại
-     * nằm trong khoảng từ startTime đến endTime.
+     * Kiểm tra suất chiếu đang hoạt động.
      */
     public boolean isActive() {
+
         LocalDateTime now = LocalDateTime.now();
 
         return !now.isBefore(startTime)
-                && !now.isAfter(endTime);
+                && now.isBefore(endTime);
     }
 
     /*
-     * Suất chiếu chưa bắt đầu.
+     * Kiểm tra suất chiếu chưa bắt đầu.
      */
     public boolean isUpcoming() {
-        return LocalDateTime.now().isBefore(startTime);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return now.isBefore(startTime);
     }
 
     /*
-     * Suất chiếu đã kết thúc.
+     * Kiểm tra suất chiếu đã kết thúc.
      */
     public boolean isFinished() {
-        return LocalDateTime.now().isAfter(endTime);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return !now.isBefore(endTime);
     }
 
     @Override
     public String toString() {
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
         return String.format(
-                "ID: %-3s | Phim: %-15s | Phòng: %-10s | %s → %s",
+                "ID: %-5s | Phim: %-25s | Phòng: %-10s | " +
+                        "Bắt đầu: %s | Kết thúc: %s",
                 id,
-                movie.getTitle(),
-                cinemaRoom.getName(),
-                startTime,
-                endTime
+                movie != null ? movie.getTitle() : "Không có",
+                cinemaRoom != null ? cinemaRoom.getName() : "Không có",
+                startTime.format(formatter),
+                endTime.format(formatter)
         );
     }
 }

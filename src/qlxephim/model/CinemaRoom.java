@@ -1,6 +1,7 @@
-package qlxephim.model;
+package model;
 
 public class CinemaRoom {
+
     private String id;
     private String name;
     private int capacity;
@@ -11,6 +12,7 @@ public class CinemaRoom {
         this.capacity = capacity;
     }
 
+    // Getter
     public String getId() {
         return id;
     }
@@ -23,6 +25,7 @@ public class CinemaRoom {
         return capacity;
     }
 
+    // Setter
     public void setId(String id) {
         this.id = id;
     }
@@ -38,8 +41,10 @@ public class CinemaRoom {
     @Override
     public String toString() {
         return String.format(
-                "%s - %s (%d ghế)",
-                id, name, capacity
+                "Phòng: %s | Tên phòng: %s | Sức chứa: %d",
+                id,
+                name,
+                capacity
         );
     }
 }
