@@ -30,7 +30,7 @@ public class ShowtimeService {
                 "Avengers: Endgame",
                 181,
                 "Action",
-                "T13",
+                "13+",
                 "Đang chiếu"
         );
 
@@ -39,7 +39,7 @@ public class ShowtimeService {
                 "The Conjuring",
                 112,
                 "Horror",
-                "T18",
+                "18+",
                 "Đang chiếu"
         );
 
@@ -48,7 +48,7 @@ public class ShowtimeService {
                 "Inside Out 2",
                 100,
                 "Animation",
-                "P",
+                "No limit",
                 "Sắp chiếu"
         );
 
@@ -57,21 +57,21 @@ public class ShowtimeService {
                 "Interstellar",
                 169,
                 "Sci-Fi",
-                "T13",
+                "13+",
                 "Đã kết thúc"
         );
 
         CinemaRoom room1 =
                 new CinemaRoom(
                         "R01",
-                        "Phòng 1",
+                        "1",
                         100
                 );
 
         CinemaRoom room2 =
                 new CinemaRoom(
                         "R02",
-                        "Phòng 2",
+                        "2",
                         80
                 );
 
