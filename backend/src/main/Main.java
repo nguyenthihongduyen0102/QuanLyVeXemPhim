@@ -4,11 +4,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"controller", "repository"})
+@ComponentScan(basePackages = {"handler", "repository"})
 
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-        System.out.println("--- HỆ THỐNG RẠP CHIẾU PHIM CHO SINH VIÊN ĐANG CHẠY TẠI: http://localhost:8080 ---");
+        System.out.println("--- HỆ THỐNG RẠP CHIẾU PHIM CHO SINH VIÊN ---");
     }
 }
