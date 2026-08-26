@@ -3,11 +3,11 @@ package model;
 public class Seat {
     private String seatCode;
     private String seatNumber;
-    private TypeSeat typeOfSeat;
+    private SeatType typeOfSeat;
     private SeatStatus seatStatus;
     private String roomId;
 
-    public Seat(String seatCode, String seatNumber, TypeSeat typeOfSeat, SeatStatus seatStatus,String roomId) {
+    public Seat(String seatCode, String seatNumber, SeatType typeOfSeat, SeatStatus seatStatus,String roomId) {
         this.seatCode = seatCode;
         this.seatNumber = seatNumber;
         this.typeOfSeat = typeOfSeat;
@@ -31,11 +31,11 @@ public class Seat {
         this.seatNumber = seatNumber;
     }
 
-    public TypeSeat getTypeOfSeat() {
+    public SeatType getTypeOfSeat() {
         return typeOfSeat;
     }
 
-    public void setTypeOfSeat(TypeSeat typeOfSeat) {
+    public void setTypeOfSeat(SeatType typeOfSeat) {
         this.typeOfSeat = typeOfSeat;
     }
 

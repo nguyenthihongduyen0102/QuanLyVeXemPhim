@@ -1,6 +1,8 @@
-package model;
+package policy;
 
-public class VIPCustomerPricePolicy implements TicketPricePolicy{
+import model.Seat;
+
+public class VIPCustomerPricePolicy implements TicketPricePolicy {
     @Override
     public double FinalTicketPrice(Seat seat, double baseFare) {
         double Sum = baseFare + seat.getSurcharge();
