@@ -19,9 +19,10 @@ public class MovieService {
         createSampleData();
     }
 
-    /*
-     * Tạo dữ liệu mẫu.
-     */
+    // =========================
+    // TẠO DỮ LIỆU MẪU
+    // =========================
+
     private void createSampleData() {
 
         Movie movie1 = new Movie(
@@ -29,7 +30,7 @@ public class MovieService {
                 "Avengers: Endgame",
                 181,
                 "Action",
-                "T13",
+                "13+",
                 "Đang chiếu"
         );
 
@@ -38,7 +39,7 @@ public class MovieService {
                 "The Conjuring",
                 112,
                 "Horror",
-                "T18",
+                "18+",
                 "Đang chiếu"
         );
 
@@ -47,7 +48,7 @@ public class MovieService {
                 "Inside Out 2",
                 100,
                 "Animation",
-                "P",
+                "No limit",
                 "Sắp chiếu"
         );
 
@@ -56,7 +57,7 @@ public class MovieService {
                 "Interstellar",
                 169,
                 "Sci-Fi",
-                "T13",
+                "13+",
                 "Đã kết thúc"
         );
 
@@ -64,74 +65,50 @@ public class MovieService {
         movies.add(movie2);
         movies.add(movie3);
         movies.add(movie4);
-
-        // Phòng chiếu
-        var room1 = new qlxemphim.model.CinemaRoom(
-                "R01",
-                "Phòng 1",
-                100
-        );
-
-        var room2 = new qlxemphim.model.CinemaRoom(
-                "R02",
-                "Phòng 2",
-                80
-        );
-
-        /*
-         * Có thể thêm Showtime trực tiếp vào danh sách.
-         */
-        java.time.LocalDateTime now =
-                java.time.LocalDateTime.now();
-
-        showtimes.add(
-                new Showtime(
-                        "ST01",
-                        movie1,
-                        room1,
-                        now.minusMinutes(30),
-                        now.plusMinutes(150)
-                )
-        );
-
-        showtimes.add(
-                new Showtime(
-                        "ST02",
-                        movie2,
-                        room2,
-                        now.plusHours(2),
-                        now.plusHours(4)
-                )
-        );
-
-        showtimes.add(
-                new Showtime(
-                        "ST03",
-                        movie4,
-                        room1,
-                        now.minusHours(4),
-                        now.minusHours(1)
-                )
-        );
     }
 
-    /*
-     * 1. Lấy danh sách tất cả phim.
-     */
+    // =========================
+    // 1. LẤY TẤT CẢ PHIM
+    // =========================
+
     public List<Movie> getAllMovies() {
 
         return new ArrayList<>(movies);
     }
 
-    /*
-     * 2. Tìm phim theo tên.
-     *
-     * Không phân biệt chữ hoa/chữ thường.
-     * Có thể tìm một phần tên.
-     */
-    public List<Movie> searchMovieByName(String keyword) {
+    // =========================
+    // 2. TÌM PHIM THEO ID
+    // =========================
 
-        List<Movie> result = new ArrayList<>();
+    public Movie findById(String movieId) {
+
+        if (movieId == null ||
+                movieId.trim().isEmpty()) {
+
+            return null;
+        }
+
+        for (Movie movie : movies) {
+
+            if (movie.getId()
+                    .equalsIgnoreCase(movieId.trim())) {
+
+                return movie;
+            }
+        }
+
+        return null;
+    }
+
+    // =========================
+    // 3. TÌM PHIM THEO TÊN
+    // =========================
+
+    public List<Movie> searchMovieByName(
+            String keyword) {
+
+        List<Movie> result =
+                new ArrayList<>();
 
         if (keyword == null ||
                 keyword.trim().isEmpty()) {
@@ -155,10 +132,15 @@ public class MovieService {
         return result;
     }
 
-    /*
-     * 3. Kiểm tra một phim có đang chiếu hay không.
-     */
+    // =========================
+    // 4. KIỂM TRA PHIM ĐANG CHIẾU
+    // =========================
+
     public boolean isMovieShowing(String movieId) {
+
+        if (movieId == null) {
+            return false;
+        }
 
         for (Showtime showtime : showtimes) {
 
@@ -171,7 +153,9 @@ public class MovieService {
                             .getId()
                             .equalsIgnoreCase(movieId);
 
-            if (sameMovie && showtime.isActive()) {
+            if (sameMovie &&
+                    showtime.isActive()) {
+
                 return true;
             }
         }
@@ -179,12 +163,14 @@ public class MovieService {
         return false;
     }
 
-    /*
-     * 4. Lấy danh sách phim đang chiếu.
-     */
+    // =========================
+    // 5. LẤY PHIM ĐANG CHIẾU
+    // =========================
+
     public List<Movie> getNowShowingMovies() {
 
-        List<Movie> result = new ArrayList<>();
+        List<Movie> result =
+                new ArrayList<>();
 
         for (Movie movie : movies) {
 
@@ -196,36 +182,19 @@ public class MovieService {
         return result;
     }
 
-    /*
-     * Tìm phim theo ID.
-     */
-    public Movie findById(String movieId) {
+    // =========================
+    // 6. LẤY SUẤT CHIẾU CỦA PHIM
+    // =========================
 
-        if (movieId == null) {
-            return null;
-        }
-
-        for (Movie movie : movies) {
-
-            if (movie.getId()
-                    .equalsIgnoreCase(movieId)) {
-
-                return movie;
-            }
-        }
-
-        return null;
-    }
-
-    /*
-     * Lấy các suất chiếu của một phim.
-     */
     public List<Showtime> getShowtimesOfMovie(
             String movieId) {
 
-        List<Showtime> result = new ArrayList<>();
+        List<Showtime> result =
+                new ArrayList<>();
 
-        if (movieId == null) {
+        if (movieId == null ||
+                movieId.trim().isEmpty()) {
+
             return result;
         }
 
@@ -244,5 +213,16 @@ public class MovieService {
         }
 
         return result;
+    }
+
+    // =========================
+    // THÊM SUẤT CHIẾU
+    // =========================
+
+    public void addShowtime(Showtime showtime) {
+
+        if (showtime != null) {
+            showtimes.add(showtime);
+        }
     }
 }

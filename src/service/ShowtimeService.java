@@ -19,9 +19,10 @@ public class ShowtimeService {
         createSampleData();
     }
 
-    /*
-     * Tạo dữ liệu mẫu.
-     */
+    // =========================
+    // TẠO DỮ LIỆU MẪU
+    // =========================
+
     private void createSampleData() {
 
         Movie movie1 = new Movie(
@@ -51,11 +52,28 @@ public class ShowtimeService {
                 "Sắp chiếu"
         );
 
+        Movie movie4 = new Movie(
+                "M04",
+                "Interstellar",
+                169,
+                "Sci-Fi",
+                "T13",
+                "Đã kết thúc"
+        );
+
         CinemaRoom room1 =
-                new CinemaRoom("R01", "Phòng 1", 100);
+                new CinemaRoom(
+                        "R01",
+                        "Phòng 1",
+                        100
+                );
 
         CinemaRoom room2 =
-                new CinemaRoom("R02", "Phòng 2", 80);
+                new CinemaRoom(
+                        "R02",
+                        "Phòng 2",
+                        80
+                );
 
         LocalDateTime now =
                 LocalDateTime.now();
@@ -92,27 +110,41 @@ public class ShowtimeService {
                         now.minusHours(2)
                 )
         );
+
+        // Đã kết thúc
+        showtimes.add(
+                new Showtime(
+                        "ST04",
+                        movie4,
+                        room2,
+                        now.minusHours(5),
+                        now.minusHours(2)
+                )
+        );
     }
 
-    /*
-     * Lấy toàn bộ suất chiếu.
-     */
+    // =========================
+    // 1. LẤY TẤT CẢ SUẤT CHIẾU
+    // =========================
+
     public List<Showtime> getAllShowtimes() {
 
         return new ArrayList<>(showtimes);
     }
 
-    /*
-     * Kiểm tra suất chiếu có tồn tại hay không.
-     */
+    // =========================
+    // 2. KIỂM TRA TỒN TẠI
+    // =========================
+
     public boolean exists(String showtimeId) {
 
         return findById(showtimeId) != null;
     }
 
-    /*
-     * Kiểm tra suất chiếu có đang hoạt động hay không.
-     */
+    // =========================
+    // 3. KIỂM TRA ĐANG HOẠT ĐỘNG
+    // =========================
+
     public boolean isActive(String showtimeId) {
 
         Showtime showtime =
@@ -125,19 +157,22 @@ public class ShowtimeService {
         return showtime.isActive();
     }
 
-    /*
-     * Tìm suất chiếu theo ID.
-     */
+    // =========================
+    // 4. TÌM THEO ID
+    // =========================
+
     public Showtime findById(String showtimeId) {
 
-        if (showtimeId == null) {
+        if (showtimeId == null ||
+                showtimeId.trim().isEmpty()) {
+
             return null;
         }
 
         for (Showtime showtime : showtimes) {
 
             if (showtime.getId()
-                    .equalsIgnoreCase(showtimeId)) {
+                    .equalsIgnoreCase(showtimeId.trim())) {
 
                 return showtime;
             }
@@ -146,9 +181,10 @@ public class ShowtimeService {
         return null;
     }
 
-    /*
-     * Lấy danh sách các suất chiếu đang hoạt động.
-     */
+    // =========================
+    // 5. LẤY SUẤT CHIẾU ĐANG HOẠT ĐỘNG
+    // =========================
+
     public List<Showtime> getActiveShowtimes() {
 
         List<Showtime> result =
@@ -164,16 +200,19 @@ public class ShowtimeService {
         return result;
     }
 
-    /*
-     * Lấy các suất chiếu của một phim.
-     */
+    // =========================
+    // 6. LẤY SUẤT CHIẾU THEO PHIM
+    // =========================
+
     public List<Showtime> getShowtimesByMovie(
             String movieId) {
 
         List<Showtime> result =
                 new ArrayList<>();
 
-        if (movieId == null) {
+        if (movieId == null ||
+                movieId.trim().isEmpty()) {
+
             return result;
         }
 
@@ -192,5 +231,16 @@ public class ShowtimeService {
         }
 
         return result;
+    }
+
+    // =========================
+    // 7. THÊM SUẤT CHIẾU
+    // =========================
+
+    public void addShowtime(Showtime showtime) {
+
+        if (showtime != null) {
+            showtimes.add(showtime);
+        }
     }
 }

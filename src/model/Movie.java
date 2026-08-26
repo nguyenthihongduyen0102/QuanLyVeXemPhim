@@ -9,8 +9,12 @@ public class Movie {
     private String ageRestriction;
     private String status;
 
-    public Movie(String id, String title, int duration,
-                 String genre, String ageRestriction, String status) {
+    public Movie(String id,
+                 String title,
+                 int duration,
+                 String genre,
+                 String ageRestriction,
+                 String status) {
 
         this.id = id;
         this.title = title;
@@ -20,7 +24,10 @@ public class Movie {
         this.status = status;
     }
 
-    // Getter
+    // =========================
+    // GETTER
+    // =========================
+
     public String getId() {
         return id;
     }
@@ -45,7 +52,10 @@ public class Movie {
         return status;
     }
 
-    // Setter
+    // =========================
+    // SETTER
+    // =========================
+
     public void setId(String id) {
         this.id = id;
     }
@@ -70,8 +80,13 @@ public class Movie {
         this.status = status;
     }
 
+    // =========================
+    // TO STRING
+    // =========================
+
     @Override
     public String toString() {
+
         return String.format(
                 "ID: %-5s | Tên: %-25s | Thời lượng: %3d phút | " +
                         "Thể loại: %-12s | Độ tuổi: %-5s | Trạng thái: %s",

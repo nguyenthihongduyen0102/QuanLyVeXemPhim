@@ -6,13 +6,19 @@ public class CinemaRoom {
     private String name;
     private int capacity;
 
-    public CinemaRoom(String id, String name, int capacity) {
+    public CinemaRoom(String id,
+                      String name,
+                      int capacity) {
+
         this.id = id;
         this.name = name;
         this.capacity = capacity;
     }
 
-    // Getter
+    // =========================
+    // GETTER
+    // =========================
+
     public String getId() {
         return id;
     }
@@ -25,7 +31,10 @@ public class CinemaRoom {
         return capacity;
     }
 
-    // Setter
+    // =========================
+    // SETTER
+    // =========================
+
     public void setId(String id) {
         this.id = id;
     }
@@ -38,10 +47,15 @@ public class CinemaRoom {
         this.capacity = capacity;
     }
 
+    // =========================
+    // TO STRING
+    // =========================
+
     @Override
     public String toString() {
+
         return String.format(
-                "Phòng: %s | Tên phòng: %s | Sức chứa: %d",
+                "ID phòng: %-5s | Tên phòng: %-15s | Sức chứa: %d",
                 id,
                 name,
                 capacity

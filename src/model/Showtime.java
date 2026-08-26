@@ -11,12 +11,11 @@ public class Showtime {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public Showtime(
-            String id,
-            Movie movie,
-            CinemaRoom cinemaRoom,
-            LocalDateTime startTime,
-            LocalDateTime endTime) {
+    public Showtime(String id,
+                    Movie movie,
+                    CinemaRoom cinemaRoom,
+                    LocalDateTime startTime,
+                    LocalDateTime endTime) {
 
         this.id = id;
         this.movie = movie;
@@ -25,7 +24,10 @@ public class Showtime {
         this.endTime = endTime;
     }
 
-    // Getter
+    // =========================
+    // GETTER
+    // =========================
+
     public String getId() {
         return id;
     }
@@ -46,7 +48,10 @@ public class Showtime {
         return endTime;
     }
 
-    // Setter
+    // =========================
+    // SETTER
+    // =========================
+
     public void setId(String id) {
         this.id = id;
     }
@@ -67,9 +72,11 @@ public class Showtime {
         this.endTime = endTime;
     }
 
-    /*
-     * Kiểm tra suất chiếu đang hoạt động.
-     */
+    // =========================
+    // KIỂM TRA TRẠNG THÁI
+    // =========================
+
+    // Đang hoạt động
     public boolean isActive() {
 
         LocalDateTime now = LocalDateTime.now();
@@ -78,9 +85,7 @@ public class Showtime {
                 && now.isBefore(endTime);
     }
 
-    /*
-     * Kiểm tra suất chiếu chưa bắt đầu.
-     */
+    // Sắp chiếu
     public boolean isUpcoming() {
 
         LocalDateTime now = LocalDateTime.now();
@@ -88,9 +93,7 @@ public class Showtime {
         return now.isBefore(startTime);
     }
 
-    /*
-     * Kiểm tra suất chiếu đã kết thúc.
-     */
+    // Đã kết thúc
     public boolean isFinished() {
 
         LocalDateTime now = LocalDateTime.now();
@@ -98,18 +101,32 @@ public class Showtime {
         return !now.isBefore(endTime);
     }
 
+    // =========================
+    // TO STRING
+    // =========================
+
     @Override
     public String toString() {
 
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
+        String movieName =
+                movie != null
+                        ? movie.getTitle()
+                        : "Không có";
+
+        String roomName =
+                cinemaRoom != null
+                        ? cinemaRoom.getName()
+                        : "Không có";
+
         return String.format(
                 "ID: %-5s | Phim: %-25s | Phòng: %-10s | " +
                         "Bắt đầu: %s | Kết thúc: %s",
                 id,
-                movie != null ? movie.getTitle() : "Không có",
-                cinemaRoom != null ? cinemaRoom.getName() : "Không có",
+                movieName,
+                roomName,
                 startTime.format(formatter),
                 endTime.format(formatter)
         );
