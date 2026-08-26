@@ -1,90 +1,79 @@
 package repository;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import model.Movie;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.File;
+import java.lang.reflect.Type;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovieRepository {
-    private final String file_txt = "src/data/movies.txt";
-    public List<Movie> loadMovies() {
-        List<Movie> movies = new ArrayList<>();
+    private final String file_json = "movies.json";
+    private final Gson gson;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file_txt))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.trim().isEmpty()) {
-                    continue;
-                }
-                String[] parts = line.split(",");
-                if (parts.length == 6) {
-                    String id = parts[0].trim();
-                    String title = parts[1].trim();
-                    String genre = parts[2].trim();
-                    int duration = Integer.parseInt(parts[3].trim());
-                    String ageRestriction = parts[4].trim();
-                    String status = parts[5].trim();
+    public MovieRepository() {
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
 
-                    Movie movie = new Movie(id, title, genre, duration, ageRestriction, status);
-                    movies.add(movie);
-                }
+        File file = new File(file_json);
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                saveAll(new ArrayList<>());
             }
         } catch (IOException e) {
-            System.out.println("Lỗi đọc file movies.txt: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            System.out.println("Lỗi ép kiểu thời lượng phim: " + e.getMessage());
+            System.out.println("Lỗi khi tạo file movies.json: " + e.getMessage());
         }
-        return movies;
     }
+
+    // Đọc danh sách phim từ file JSON
+    public List<Movie> findAll() {
+        File file = new File(file_json);
+        if (!file.exists() || file.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file_json))) {
+            Type listType = new TypeToken<ArrayList<Movie>>() {}.getType();
+            List<Movie> movies = gson.fromJson(br, listType);
+            return (movies != null) ? movies : new ArrayList<>();
+        } catch (IOException e) {
+            System.out.println("Lỗi đọc file movies.json: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    // Ghi toàn bộ danh sách phim xuống file JSON
     public void saveAll(List<Movie> movies) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_txt))) {
-            for (Movie m : movies) {
-                String line = String.format("%s,%s,%s,%d,%s,%s",
-                        m.getId(),
-                        m.getTitle(),
-                        m.getGenre(),
-                        m.getDuration(),
-                        m.getAgeRestriction(),
-                        m.getStatus());
-                bw.write(line);
-                bw.newLine();
-            }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_json))) {
+            gson.toJson(movies, bw);
         } catch (IOException e) {
-            System.out.println("Lỗi ghi file movies.txt: " + e.getMessage());
+            System.out.println("Lỗi ghi file movies.json: " + e.getMessage());
         }
     }
 
-    // Lọc danh sách các phim Đang chiếu
-    public List<Movie> findNowShowing() {
-        List<Movie> result = new ArrayList<>();
-        for (Movie m : findAll()) {
-            if ("Đang chiếu".equalsIgnoreCase(m.getStatus())) {
-                result.add(m);
-            }
-        }
-        return result;
-    }
-
-    // Tìm phim theo ID
+    // Tìm phim theo Mã ID
     public Movie findById(String id) {
         for (Movie m : findAll()) {
-            if (m.getId().equalsIgnoreCase(id)) {
+            if (m.getId() != null && m.getId().equalsIgnoreCase(id)) {
                 return m;
             }
         }
         return null;
     }
 
-    // Tìm phim theo tên (chứa từ khóa, không phân biệt hoa/thường)
-    public List<Movie> findByTitle(String title) {
+    // Tìm danh sách phim theo Thể loại
+    public List<Movie> findByGenre(String genre) {
         List<Movie> result = new ArrayList<>();
         for (Movie m : findAll()) {
-            if (m.getTitle().toLowerCase().contains(title.toLowerCase())) {
+            if (m.getGenre() != null && m.getGenre().equalsIgnoreCase(genre)) {
                 result.add(m);
             }
         }

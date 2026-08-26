@@ -1,7 +1,9 @@
 package repository;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import model.Customer;
-import model.CustomerType;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,87 +11,65 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.ArrayList;
 
 public class CustomerRepository {
-    private final String file_txt = "customers.txt";
+    private final String file_json = "customers.json";
+    private final Gson gson;
 
     public CustomerRepository() {
-        File file = new File(file_txt);
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
+
+        File file = new File(file_json);
         try {
             if (!file.exists()) {
                 file.createNewFile();
+                saveAll(new ArrayList<>());
             }
         } catch (IOException e) {
-            System.out.println("Lỗi khi tạo file customers.txt: " + e.getMessage());
+            System.out.println("Lỗi khi tạo file customers.json: " + e.getMessage());
         }
     }
 
-    // Đọc danh sách khách hàng từ file
+    // Đọc file JSON kết hợp BufferedReader
     public List<Customer> findAll() {
-        List<Customer> customers = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(file_txt))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.trim().isEmpty()) {
-                    continue;
-                }
-
-                String[] parts = line.split(",");
-                if (parts.length == 5) {
-                    String id = parts[0].trim();
-                    String fullName = parts[1].trim();
-                    String phone = parts[2].trim();
-                    String email = parts[3].trim();
-                    CustomerType customerType = CustomerType.valueOf(parts[4].trim().toUpperCase());
-
-                    Customer customer = new Customer(id, fullName, phone, email, customerType);
-                    customers.add(customer);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Lỗi đọc file customers.txt: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Lỗi định dạng loại khách hàng (CustomerType): " + e.getMessage());
+        File file = new File(file_json);
+        if (!file.exists() || file.length() == 0) {
+            return new ArrayList<>();
         }
-
-        return customers;
+        try (BufferedReader br = new BufferedReader(new FileReader(file_json))) {
+            Type listType = new TypeToken<ArrayList<Customer>>() {}.getType();
+            List<Customer> customers = gson.fromJson(br, listType);
+            return (customers != null) ? customers : new ArrayList<>();
+        } catch (IOException e) {
+            System.out.println("Lỗi đọc file customers.json: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
-    // Ghi toàn bộ danh sách khách hàng vào file
+    // Ghi file JSON kết hợp BufferedWriter
     public void saveAll(List<Customer> customers) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_txt))) {
-            for (Customer c : customers) {
-                String line = String.format("%s,%s,%s,%s,%s",
-                        c.getId(),
-                        c.getFullName(),
-                        c.getPhone(),
-                        c.getEmail(),
-                        c.getCustomerType().name());
-                bw.write(line);
-                bw.newLine();
-            }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_json))) {
+            gson.toJson(customers, bw);
         } catch (IOException e) {
-            System.out.println("Lỗi ghi file customers.txt: " + e.getMessage());
+            System.out.println("Lỗi ghi file customers.json: " + e.getMessage());
         }
     }
-
-    // Tìm khách hàng theo Mã ID
+    // Tìm khách hàng theo mã ID
     public Customer findById(String id) {
         for (Customer c : findAll()) {
-            if (c.getId().equalsIgnoreCase(id)) {
+            if (c.getId() != null && c.getId().equalsIgnoreCase(id)) {
                 return c;
             }
         }
         return null;
     }
-
-    // Tìm khách hàng theo Số điện thoại
+    // Tìm khách hàng theo số điện thoại
     public Customer findByPhone(String phone) {
         for (Customer c : findAll()) {
-            if (c.getPhone().equals(phone)) {
+            if (c.getPhone() != null && c.getPhone().equals(phone)) {
                 return c;
             }
         }
