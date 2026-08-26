@@ -1,0 +1,5 @@
+C001,Nguyễn Thị Hồng Duyên,0357886182,nguyenhongduyen022007@gmail.com,STUDENT
+C002,Tran Thi Binh,0912345678,binh.tran@student.edu.vn,STUDENT
+C003,Le Van Cuong,0923456789,cuong.vip@gmail.com,VIP
+C004,Pham Minh Dung,0934567890,dung.pham@student.edu.vn,STUDENT
+C005,Hoang Anh Tuan,0945678901,tuan.hoang@gmail.com,NORMAL
