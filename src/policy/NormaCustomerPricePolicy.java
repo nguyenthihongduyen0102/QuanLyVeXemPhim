@@ -12,3 +12,4 @@ public class NormaCustomerPricePolicy implements TicketPricePolicy {
         return Sum;
     }
 }
+//..//
