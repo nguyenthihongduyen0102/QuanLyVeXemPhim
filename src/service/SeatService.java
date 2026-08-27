@@ -40,5 +40,5 @@ public class SeatService {
     }
     public List<Seat> getSeatList() {
         return seatList;
-    }
+    }//.//
 }
