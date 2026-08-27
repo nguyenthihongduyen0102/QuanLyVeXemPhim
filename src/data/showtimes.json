@@ -1,42 +1,7 @@
-[
-  {
-    "id": "S001",
-    "movieId": "M001",
-    "roomName": "Phòng 1",
-    "startTime": "08:00",
-    "endTime": "11:01",
-    "basePrice": 90000
-  },
-  {
-    "id": "S002",
-    "movieId": "M005",
-    "roomName": "Phòng 2",
-    "startTime": "13:30",
-    "endTime": "16:31",
-    "basePrice": 100000
-  },
-  {
-    "id": "S003",
-    "movieId": "M002",
-    "roomName": "Phòng 1",
-    "startTime": "18:00",
-    "endTime": "20:28",
-    "basePrice": 95000
-  },
-  {
-    "id": "S004",
-    "movieId": "M003",
-    "roomName": "Phòng 3",
-    "startTime": "19:00",
-    "endTime": "20:43",
-    "basePrice": 85000
-  },
-  {
-    "id": "S005",
-    "movieId": "M004",
-    "roomName": "Phòng 5",
-    "startTime": "18:00",
-    "endTime": "19:51",
-    "basePrice": 65000
-  }
-]
+
+S01|M01|R01|2026-08-08T10:00|2026-08-08T13:01
+S02|M01|R02|2026-08-08T15:00|2026-08-08T18:01
+S03|M02|R01|2026-08-08T19:00|2026-08-08T20:50
+S04|M03|R03|2026-08-09T09:00|2026-08-09T11:56
+S05|M04|R02|2026-08-09T14:00|2026-08-09T16:49
+S06|M05|R01|2026-08-09T20:00|2026-08-09T21:40
