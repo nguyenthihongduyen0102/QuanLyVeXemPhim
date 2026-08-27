@@ -1,0 +1,47 @@
+[
+  {
+    "ticketId": "TK001",
+    "customerName": "Nguyễn Thị Hồng Duyên",
+    "movieTitle": "Avengers: Endgame",
+    "showtime": "08:00 - 11:01",
+    "seatType": "NORMAL",
+    "finalPrice": 72000,
+    "paymentStatus": "PAID"
+  },
+  {
+    "ticketId": "TK002",
+    "customerName": "Le Van Cuong",
+    "movieTitle": "Spider-Man: No Way Home",
+    "showtime": "18:00 - 20:28",
+    "seatType": "VIP",
+    "finalPrice": 155000,
+    "paymentStatus": "PAID"
+  },
+  {
+    "ticketId": "TK003",
+    "customerName": "Tran Thi Binh",
+    "movieTitle": "Frozen II",
+    "showtime": "19:00 - 20:43",
+    "seatType": "NORMAL",
+    "finalPrice": 68000,
+    "paymentStatus": "UNPAID"
+  },
+  {
+    "ticketId": "TK004",
+    "customerName": "Pham Minh Dung",
+    "movieTitle": "Conan Movie 27",
+    "showtime": "18:00 - 19:51",
+    "seatType": "COUPLE",
+    "finalPrice": 76000,
+    "paymentStatus": "UNPAID"
+  },
+  {
+    "ticketId": "TK005",
+    "customerName": "Hoang Anh Tuan",
+    "movieTitle": "Avengers: Endgame",
+    "showtime": "08:00 - 11:01",
+    "seatType": "VIP",
+    "finalPrice": 150000,
+    "paymentStatus": "PAID"
+  }
+]
