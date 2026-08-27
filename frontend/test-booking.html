@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Test Booking</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                    radial-gradient(
+                            circle at 10% 20%,
+                            #6a5acd,
+                            transparent 35%
+                    ),
+                    radial-gradient(
+                            circle at 90% 80%,
+                            #ff4ecd,
+                            transparent 35%
+                    ),
+                    linear-gradient(
+                            135deg,
+                            #141e30,
+                            #243b55
+                    );
+
+            padding: 30px;
+        }
+
+        .container {
+            width: 850px;
+            max-width: 95%;
+
+            padding: 35px;
+
+            background: rgba(255, 255, 255, 0.96);
+
+            border-radius: 20px;
+
+            box-shadow:
+                    0 20px 50px
+                    rgba(0, 0, 0, 0.35);
+        }
+
+        h1 {
+            text-align: center;
+
+            margin-top: 0;
+            margin-bottom: 30px;
+
+            color: #222;
+        }
+
+        h2 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+
+            font-size: 18px;
+            color: #333;
+        }
+
+        select {
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #ddd;
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            background: white;
+        }
+
+        /* =========================
+           MÀN HÌNH
+           ========================= */
+
+        .screen {
+            text-align: center;
+
+            margin: 20px 40px;
+
+            padding: 10px;
+
+            background: #ddd;
+
+            border-radius: 50%;
+
+            color: #555;
+
+            font-weight: bold;
+
+            letter-spacing: 4px;
+        }
+
+        /* =========================
+           50 GHẾ
+           ========================= */
+
+        #seat-container {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(10, 1fr);
+
+            gap: 8px;
+
+            padding: 20px;
+
+            background: #f5f5f5;
+
+            border-radius: 15px;
+        }
+
+        .seat {
+
+            height: 42px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #ddd;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .seat:hover {
+            transform: scale(1.05);
+
+            background: #bbb;
+        }
+
+        .seat.selected {
+            background: #28a745;
+
+            color: white;
+        }
+
+        .seat.booked {
+            background: #777;
+
+            color: white;
+
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           CHÚ THÍCH GHẾ
+           ========================= */
+
+        .legend {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 25px;
+
+            margin-top: 15px;
+
+            font-size: 14px;
+        }
+
+        .legend-item {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+        }
+
+        .legend-box {
+
+            width: 18px;
+            height: 18px;
+
+            border-radius: 4px;
+
+            background: #ddd;
+        }
+
+        .legend-box.selected {
+            background: #28a745;
+        }
+
+        .legend-box.booked {
+            background: #777;
+        }
+
+        /* =========================
+           BOOKING INFO
+           ========================= */
+
+        #booking-info {
+
+            margin-top: 15px;
+
+            padding: 20px;
+
+            background: #f5f5f5;
+
+            border-radius: 15px;
+        }
+
+        #booking-info p {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin: 0;
+
+            padding: 10px 0;
+
+            border-bottom: 1px solid #ddd;
+        }
+
+        #booking-info p:last-child {
+            border-bottom: none;
+        }
+
+        #selected-seat {
+            color: #28a745;
+
+            font-weight: bold;
+        }
+
+        #discount {
+            color: #e67e22;
+
+            font-weight: bold;
+        }
+
+        #total-price {
+
+            color: #6a5acd;
+
+            font-size: 20px;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           BUTTON
+           ========================= */
+
+        #booking-button {
+
+            width: 100%;
+
+            margin-top: 25px;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #6a5acd,
+                            #ff4ecd
+                    );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        #booking-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                    0 8px 20px
+                    rgba(106, 90, 205, 0.3);
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <h1>🎬 TEST BOOKING</h1>
+
+
+    <!-- =========================
+         KHÁCH HÀNG
+         ========================= -->
+
+    <h2>Loại khách hàng</h2>
+
+    <select id="customer-type">
+
+        <option value="">
+            -- Chọn loại khách hàng --
+        </option>
+
+        <option value="NORMAL">
+            Khách thường
+        </option>
+
+        <option value="STUDENT">
+            Sinh viên
+        </option>
+
+        <option value="VIP">
+            Khách VIP
+        </option>
+
+    </select>
+
+
+    <!-- =========================
+         GIỜ CHIẾU
+         ========================= -->
+
+    <h2>Giờ chiếu</h2>
+
+    <select id="showtime">
+
+        <option value="">
+            -- Chọn giờ chiếu --
+        </option>
+
+        <option value="18:30">
+            18:30
+        </option>
+
+        <option value="19:00">
+            19:00
+        </option>
+
+        <option value="21:00">
+            21:00
+        </option>
+
+    </select>
+
+
+    <!-- =========================
+         MÀN HÌNH
+         ========================= -->
+
+    <div class="screen">
+        SCREEN
+    </div>
+
+
+    <!-- =========================
+         50 GHẾ
+         ========================= -->
+
+    <h2>Chọn ghế</h2>
+
+    <div id="seat-container">
+
+        <!-- Hàng A -->
+
+        <button class="seat" data-seat="A1">A1</button>
+        <button class="seat" data-seat="A2">A2</button>
+        <button class="seat" data-seat="A3">A3</button>
+        <button class="seat" data-seat="A4">A4</button>
+        <button class="seat" data-seat="A5">A5</button>
+        <button class="seat" data-seat="A6">A6</button>
+        <button class="seat" data-seat="A7">A7</button>
+        <button class="seat" data-seat="A8">A8</button>
+        <button class="seat" data-seat="A9">A9</button>
+        <button class="seat" data-seat="A10">A10</button>
+
+        <!-- Hàng B -->
+
+        <button class="seat" data-seat="B1">B1</button>
+        <button class="seat" data-seat="B2">B2</button>
+        <button class="seat" data-seat="B3">B3</button>
+        <button class="seat" data-seat="B4">B4</button>
+        <button class="seat" data-seat="B5">B5</button>
+        <button class="seat" data-seat="B6">B6</button>
+        <button class="seat" data-seat="B7">B7</button>
+        <button class="seat" data-seat="B8">B8</button>
+        <button class="seat" data-seat="B9">B9</button>
+        <button class="seat" data-seat="B10">B10</button>
+
+        <!-- Hàng C -->
+
+        <button class="seat" data-seat="C1">C1</button>
+        <button class="seat" data-seat="C2">C2</button>
+        <button class="seat" data-seat="C3">C3</button>
+        <button class="seat" data-seat="C4">C4</button>
+        <button class="seat" data-seat="C5">C5</button>
+        <button class="seat" data-seat="C6">C6</button>
+        <button class="seat" data-seat="C7">C7</button>
+        <button class="seat" data-seat="C8">C8</button>
+        <button class="seat" data-seat="C9">C9</button>
+        <button class="seat" data-seat="C10">C10</button>
+
+        <!-- Hàng D -->
+
+        <button class="seat" data-seat="D1">D1</button>
+        <button class="seat" data-seat="D2">D2</button>
+        <button class="seat" data-seat="D3">D3</button>
+        <button class="seat" data-seat="D4">D4</button>
+        <button class="seat" data-seat="D5">D5</button>
+        <button class="seat" data-seat="D6">D6</button>
+        <button class="seat" data-seat="D7">D7</button>
+        <button class="seat" data-seat="D8">D8</button>
+        <button class="seat" data-seat="D9">D9</button>
+        <button class="seat" data-seat="D10">D10</button>
+
+        <!-- Hàng E -->
+
+        <button class="seat" data-seat="E1">E1</button>
+        <button class="seat" data-seat="E2">E2</button>
+        <button class="seat" data-seat="E3">E3</button>
+        <button class="seat" data-seat="E4">E4</button>
+        <button class="seat" data-seat="E5">E5</button>
+        <button class="seat" data-seat="E6">E6</button>
+        <button class="seat" data-seat="E7">E7</button>
+        <button class="seat" data-seat="E8">E8</button>
+        <button class="seat" data-seat="E9">E9</button>
+        <button class="seat" data-seat="E10">E10</button>
+
+    </div>
+
+
+    <div class="legend">
+
+        <div class="legend-item">
+            <div class="legend-box"></div>
+            Ghế trống
+        </div>
+
+        <div class="legend-item">
+            <div class="legend-box selected"></div>
+            Đang chọn
+        </div>
+
+        <div class="legend-item">
+            <div class="legend-box booked"></div>
+            Đã đặt
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         THÔNG TIN BOOKING
+         ========================= -->
+
+    <h2>Thông tin Booking</h2>
+
+    <div id="booking-info">
+
+        <p>
+
+            <span>Ghế đã chọn</span>
+
+            <span id="selected-seat">
+                Chưa chọn
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <span>Số lượng ghế</span>
+
+            <span id="seat-count">
+                0
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <span>Giá mỗi ghế</span>
+
+            <span id="ticket-price">
+                80.000 VNĐ
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <span>Giảm giá</span>
+
+            <span id="discount">
+                0 VNĐ
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <strong>Tổng tiền</strong>
+
+            <strong id="total-price">
+                0 VNĐ
+            </strong>
+
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         THANH TOÁN
+         ========================= -->
+
+    <h2>Phương thức thanh toán</h2>
+
+    <select id="payment-method">
+
+        <option value="">
+            -- Chọn phương thức thanh toán --
+        </option>
+
+        <option value="CASH">
+            💵 Tiền mặt
+        </option>
+
+        <option value="BANK_TRANSFER">
+            🏦 Chuyển khoản
+        </option>
+
+        <option value="EWALLET">
+            📱 Ví điện tử
+        </option>
+
+        <option value="CARD">
+            💳 Thẻ
+        </option>
+
+    </select>
+
+
+    <!-- =========================
+         ĐẶT VÉ
+         ========================= -->
+
+    <button id="booking-button">
+
+        🎟️ Đặt vé & Thanh toán
+
+    </button>
+
+
+</div>
+
+
+<!-- =========================
+     BOOKING.JS
+     ========================= -->
+
+<script src="js/booking.js"></script>
+
+
+<script>
+
+    // ==========================================
+    // CUSTOMER TEST
+    // ==========================================
+
+    const customerId = "C01";
+
+
+    // ==========================================
+    // GHẾ TEST
+    // ==========================================
+
+    let testSelectedSeats = [];
+
+
+    const seatButtons =
+        document.querySelectorAll(".seat");
+
+
+    // ==========================================
+    // GIẢ LẬP MỘT SỐ GHẾ ĐÃ ĐẶT
+    // ==========================================
+
+    const bookedSeats = [
+        "A3",
+        "A10",
+        "B5",
+        "C7",
+        "D10"
+    ];
+
+
+    seatButtons.forEach(function(button) {
+
+        const seatNumber =
+            button.dataset.seat;
+
+
+        // Ghế đã đặt
+
+        if (
+            bookedSeats.includes(
+                seatNumber
+            )
+        ) {
+
+            button.classList.add(
+                "booked"
+            );
+
+            button.disabled = true;
+
+            return;
+        }
+
+
+        // Chọn ghế
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                const index =
+                    testSelectedSeats.indexOf(
+                        seatNumber
+                    );
+
+
+                // Thêm ghế
+
+                if (index === -1) {
+
+                    testSelectedSeats.push(
+                        seatNumber
+                    );
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+                }
+
+                // Bỏ ghế
+
+                else {
+
+                    testSelectedSeats.splice(
+                        index,
+                        1
+                    );
+
+                    button.classList.remove(
+                        "selected"
+                    );
+
+                }
+
+
+                // Gửi sang booking.js
+
+                setSelectedSeats(
+                    testSelectedSeats
+                );
+
+            }
+        );
+
+    });
+
+
+    // ==========================================
+    // CHỌN LOẠI KHÁCH
+    // ==========================================
+
+    document.getElementById(
+        "customer-type"
+    ).addEventListener(
+        "change",
+        function() {
+
+            setCustomerType(
+                this.value
+            );
+
+        }
+    );
+
+
+    // ==========================================
+    // CHỌN PHƯƠNG THỨC THANH TOÁN
+    // ==========================================
+
+    document.getElementById(
+        "payment-method"
+    ).addEventListener(
+        "change",
+        function() {
+
+            setPaymentMethod(
+                this.value
+            );
+
+        }
+    );
+
+
+    // ==========================================
+    // ĐẶT VÉ
+    // ==========================================
+
+    document.getElementById(
+        "booking-button"
+    ).addEventListener(
+        "click",
+        function() {
+
+
+            const showtime =
+                document.getElementById(
+                    "showtime"
+                ).value;
+
+
+            const customerType =
+                document.getElementById(
+                    "customer-type"
+                ).value;
+
+
+            const paymentMethod =
+                document.getElementById(
+                    "payment-method"
+                ).value;
+
+
+            // Gọi booking.js
+
+            confirmBooking(
+
+                customerId,
+
+                showtime,
+
+                testSelectedSeats,
+
+                customerType,
+
+                paymentMethod
+
+            );
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
