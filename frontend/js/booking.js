@@ -515,3 +515,196 @@ function confirmBooking(
 
     return true;
 }
+// ==============================
+// ĐẶT VÉ + THANH TOÁN
+// ==============================
+
+function bookTicket(customerId) {
+
+    // Kiểm tra khách hàng
+
+    if (!customerId) {
+
+        alert("Khách hàng không tồn tại");
+
+        return;
+    }
+
+
+    // Kiểm tra suất chiếu
+
+    if (!selectedShowtime) {
+
+        alert("Vui lòng chọn suất chiếu");
+
+        return;
+    }
+
+
+    // Kiểm tra ghế
+
+    if (selectedSeats.length === 0) {
+
+        alert("Vui lòng chọn ít nhất một ghế");
+
+        return;
+    }
+
+
+    // ==============================
+    // LẤY PHƯƠNG THỨC THANH TOÁN
+    // ==============================
+
+    const paymentMethod =
+        document.getElementById(
+            "payment-method"
+        ).value;
+
+
+    if (!paymentMethod) {
+
+        alert(
+            "Vui lòng chọn phương thức thanh toán"
+        );
+
+        return;
+    }
+
+
+    // ==============================
+    // TÍNH TỔNG TIỀN
+    // ==============================
+
+    const totalPrice =
+        selectedSeats.length *
+        PRICE_PER_SEAT;
+
+
+    // ==============================
+    // DỮ LIỆU BOOKING
+    // ==============================
+
+    const bookingData = {
+
+        customerId: customerId,
+
+        showtimeId: selectedShowtime,
+
+        seatNumbers: [...selectedSeats],
+
+        totalPrice: totalPrice,
+
+        paymentMethod: paymentMethod
+
+    };
+
+
+    console.log(
+        "========== BOOKING =========="
+    );
+
+    console.log(bookingData);
+
+
+    // ==============================
+    // THANH TOÁN
+    // ==============================
+
+    processPayment(
+        paymentMethod,
+        totalPrice
+    );
+
+}
+
+
+// ==============================
+// XỬ LÝ THANH TOÁN
+// ==============================
+
+function processPayment(
+    paymentMethod,
+    totalPrice
+) {
+
+    let message = "";
+
+
+    switch (paymentMethod) {
+
+        case "CASH":
+
+            message =
+                "Thanh toán tiền mặt thành công!";
+
+            break;
+
+
+        case "BANK_TRANSFER":
+
+            message =
+                "Chuyển khoản thành công!";
+
+            break;
+
+
+        case "EWALLET":
+
+            message =
+                "Thanh toán ví điện tử thành công!";
+
+            break;
+
+
+        case "CARD":
+
+            message =
+                "Thanh toán bằng thẻ thành công!";
+
+            break;
+
+
+        default:
+
+            alert(
+                "Phương thức thanh toán không hợp lệ"
+            );
+
+            return;
+
+    }
+
+
+    // ==============================
+    // TẠO MÃ VÉ
+    // ==============================
+
+    const ticketCode =
+        "BK-" +
+        Date.now().toString().slice(-6);
+
+
+    // ==============================
+    // HIỂN THỊ KẾT QUẢ
+    // ==============================
+
+    alert(
+
+        message +
+
+        "\n\nMã vé: " +
+        ticketCode +
+
+        "\nGhế: " +
+        selectedSeats.join(", ") +
+
+        "\nSố lượng: " +
+        selectedSeats.length +
+
+        "\nTổng tiền: " +
+        totalPrice.toLocaleString("vi-VN") +
+        " VNĐ"
+
+    );
+
+}
