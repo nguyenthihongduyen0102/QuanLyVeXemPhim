@@ -13,103 +13,155 @@ public class BookingService {
     private TicketRepository ticketRepository;
 
     public BookingService(TicketRepository ticketRepository) {
+
         if (ticketRepository == null) {
             throw new IllegalArgumentException(
-                    "TicketRepository không hợp lệ"
+                    "TicketRepository khong hop le!"
             );
         }
 
         this.ticketRepository = ticketRepository;
     }
 
+    // =========================
+    // DAT VE
+    // =========================
+
     public Ticket bookTicket(Customer customer,
                              Showtime showtime,
-                             String seatNumber) {
+                             Seat seat) {
+
+        // -------------------------
+        // KIEM TRA KHACH HANG
+        // -------------------------
 
         if (customer == null) {
             throw new IllegalArgumentException(
-                    "Khách hàng không tồn tại"
+                    "Khach hang khong ton tai!"
             );
         }
+
+        // -------------------------
+        // KIEM TRA SUAT CHIEU
+        // -------------------------
 
         if (showtime == null) {
             throw new IllegalArgumentException(
-                    "Suất chiếu không tồn tại"
+                    "Suat chieu khong ton tai!"
             );
         }
 
-        if (!showtime.isAvailableForBooking()) {
+        // -------------------------
+        // KIEM TRA PHIM
+        // -------------------------
+
+        Movie movie = showtime.getMovie();
+
+        if (movie == null) {
             throw new IllegalArgumentException(
-                    "Phim hiện tại không mở bán"
+                    "Suat chieu khong co phim!"
             );
         }
 
-        if (!showtime.hasAvailableSeat()) {
+        String movieStatus = movie.getStatus();
+
+        if (!"Đang chiếu".equalsIgnoreCase(movieStatus)
+                && !"Dang chieu".equalsIgnoreCase(movieStatus)) {
+
             throw new IllegalArgumentException(
-                    "Suất chiếu đã hết ghế"
+                    "Khong the dat ve phim da ngung chieu!"
             );
         }
 
-        if (seatNumber == null || seatNumber.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Số ghế không được để trống"
-            );
-        }
-
-        Seat seat = showtime.findSeatByNumber(seatNumber);
+        // -------------------------
+        // KIEM TRA GHE
+        // -------------------------
 
         if (seat == null) {
             throw new IllegalArgumentException(
-                    "Ghế không tồn tại"
+                    "Ghe khong ton tai!"
             );
         }
 
-        if (!seat.isAvailable()) {
+        // Kiem tra ghe da dat chua
+        if (seat.getSeatStatus() == SeatStatus.Booked) {
             throw new IllegalArgumentException(
-                    "Ghế đã được đặt"
+                    "Ghe " + seat.getSeatNumber()
+                            + " da duoc dat!"
             );
         }
 
-        // Chọn chính sách giá
+        // -------------------------
+        // CHON CHINH SACH GIA
+        // -------------------------
+
         TicketPricePolicy policy;
 
-        if (customer.isStudent()) {
+        if (customer.getCustomerType() == CustomerType.STUDENT) {
+
             policy = new StudentPricePolicy();
 
-        } else if (customer.isVip()) {
+        } else if (customer.getCustomerType() == CustomerType.VIP) {
+
             policy = new VipPricePolicy();
 
         } else {
+
             policy = new NormalCustomerPricePolicy();
         }
 
-        // Tính giá vé
+        // -------------------------
+        // TINH GIA VE
+        // -------------------------
+
         double finalPrice =
                 policy.calculatePrice(showtime, seat);
 
-        // Tạo mã vé
+        if (finalPrice <= 0) {
+            throw new IllegalArgumentException(
+                    "Gia ve phai lon hon 0!"
+            );
+        }
+
+        // -------------------------
+        // SINH MA VE
+        // -------------------------
+
         String ticketId =
                 IdGenerator.generateTicketId();
 
-        // Tạo Ticket
+        // -------------------------
+        // TAO TICKET
+        // -------------------------
+
         Ticket ticket = new Ticket(
                 ticketId,
                 customer,
-                showtime.getMovie(),
+                movie,
                 showtime,
                 seat,
                 finalPrice,
                 PaymentStatus.UNPAID
         );
 
-        // Đặt ghế
-        seat.setSeatStatus(SeatStatus.BOOKED);
+        // -------------------------
+        // DAT GHE
+        // -------------------------
 
-        // Lưu Ticket thông qua Repository
+        seat.bookASeat();
+
+        // -------------------------
+        // LUU VE
+        // -------------------------
+
         ticketRepository.addTicket(ticket);
 
         return ticket;
     }
+
+    // =========================
+    // GETTER
+    // =========================
 
     public TicketRepository getTicketRepository() {
         return ticketRepository;
