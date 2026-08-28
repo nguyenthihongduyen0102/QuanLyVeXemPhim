@@ -1,66 +1,64 @@
 package model;
 
-import java.util.ArrayList;
-
 public class CinemaRoom {
-    private String roomId;
-    private String roomName;
-    private ArrayList<Seat> seats; // danh sách ghế gốc của phòng
 
-    public CinemaRoom(){
-        seats = new ArrayList<>();
+    private String id;
+    private String name;
+    private int capacity;
+
+    public CinemaRoom(String id,
+                      String name,
+                      int capacity) {
+
+        this.id = id;
+        this.name = name;
+        this.capacity = capacity;
     }
 
-    public CinemaRoom(String roomId,
-                      String roomName,
-                      ArrayList<Seat> seats) {
-        this.roomId = roomId;
-        this.roomName = roomName;
-        this.seats = seats;
+    // =========================
+    // GETTER
+    // =========================
+
+    public String getId() {
+        return id;
     }
 
-    public String getRoomId() {
-        return roomId;
+    public String getName() {
+        return name;
     }
 
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public String getRoomName() {
-        return roomName;
+    // =========================
+    // SETTER
+    // =========================
+
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public ArrayList<Seat> getSeats() {
-        return seats;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
-    public void setSeats(ArrayList<Seat> seats) {
-        if (seats == null) {
-            this.seats = new ArrayList<>();
-        } else {
-            this.seats = seats;
-        }
-    }
+    // =========================
+    // TO STRING
+    // =========================
 
-    public void addSeat(Seat seat){
-        if(seat != null){
-            seats.add(seat);
-        }
-    }
+    @Override
+    public String toString() {
 
-    //hàm trả về 1 object Seat để kiểm tra xem ghế đó có tồn tại không
-    public Seat findSeatByNumber(String seatNumber){//là số ghế người ngồi
-        for(int i = 0; i < seats.size(); i++){ // nhập 1 giá trị thì nó sẽ duyệt toàn bộ danh sách ghi
-            Seat seat = seats.get(i);
-            if(seat.getSeatNumber().equalsIgnoreCase(seatNumber)){ // so sánh ghế vừa nhập với các ghế trong danh sách nếu phù hợp thì trả về ghế vừa nhập
-                return seat;
-            }
-        }
-        return null;
+        return String.format(
+                "ID phòng: %-5s | Tên phòng: %-15s | Sức chứa: %d",
+                id,
+                name,
+                capacity
+        );
     }
 }

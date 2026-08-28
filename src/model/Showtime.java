@@ -1,129 +1,134 @@
 package model;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Showtime {
-    private String showtimeId; // mã suất chiếu
-    private Movie movie; // phim
-    private CinemaRoom cinemaRoom; // phòng chiếu
-    private String startTime; // thời gian bắt đầu
-    private String endTime; // thời gian kết thúc
-    private double basePrice; // giá vé cơ bản
-    private ArrayList<Seat> seats; //danh sách ghế riêng của mỗi suất chiếu
 
-    public Showtime(){
-        this.seats = new ArrayList<>();
-    }
+    private String id;
+    private Movie movie;
+    private CinemaRoom cinemaRoom;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    public Showtime(String showtimeId,
+    public Showtime(String id,
                     Movie movie,
                     CinemaRoom cinemaRoom,
-                    String startTime,
-                    String endTime,
-                    double basePrice,
-                    ArrayList<Seat> seats) {
-        this.showtimeId= showtimeId;
+                    LocalDateTime startTime,
+                    LocalDateTime endTime) {
+
+        this.id = id;
         this.movie = movie;
         this.cinemaRoom = cinemaRoom;
         this.startTime = startTime;
         this.endTime = endTime;
-        setBasePrice(basePrice);
-        setSeats(seats);
     }
 
-    public String getShowtimeId() {
-        return showtimeId;
-    }
+    // =========================
+    // GETTER
+    // =========================
 
-    public void setShowtimeId(String showtimeId) {
-        this.showtimeId = showtimeId;
+    public String getId() {
+        return id;
     }
 
     public Movie getMovie() {
         return movie;
     }
 
-    public void setMovie(Movie movie) {
-        this.movie = movie;
-    }
-
     public CinemaRoom getCinemaRoom() {
         return cinemaRoom;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    // =========================
+    // SETTER
+    // =========================
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 
     public void setCinemaRoom(CinemaRoom cinemaRoom) {
         this.cinemaRoom = cinemaRoom;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
-    public double getBasePrice() {
-        return basePrice;
+    // =========================
+    // KIỂM TRA TRẠNG THÁI
+    // =========================
+
+    // Đang hoạt động
+    public boolean isActive() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return !now.isBefore(startTime)
+                && now.isBefore(endTime);
     }
 
-    public void setBasePrice(double basePrice){
-        if(basePrice > 0) {
-            this.basePrice = basePrice;
-        }else throw new IllegalArgumentException("Giá vé phải lớn hơn 0");
+    // Sắp chiếu
+    public boolean isUpcoming() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return now.isBefore(startTime);
     }
 
-    public ArrayList<Seat> getSeats() {
-        return seats;
+    // Đã kết thúc
+    public boolean isFinished() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return !now.isBefore(endTime);
     }
 
-    public void setSeats(ArrayList<Seat> seats) {
-        if(seats == null) {
-            this.seats = new ArrayList<>();
-        } else {
-            this.seats = seats;
-        }
-    }
+    // =========================
+    // TO STRING
+    // =========================
 
-    public void addSeat(Seat seat){
-        if(seat != null) {
-            seats.add(seat);
-        }
-    }
+    @Override
+    public String toString() {
 
-    // kiểm tra xem ghế có tồn tại không nếu có tồn tại trả về object seat không thì trả về null
-    public Seat findSeatByNumber(String seatNumber){
-        for(int i = 0; i < seats.size(); i++){
-            Seat seat = seats.get(i);
-            if(seat.getSeatNumber().equalsIgnoreCase(seatNumber)){
-                return seat;
-            }
-        }
-        return null;
-    }
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    // kiểm tra xem suất chiếu có còn ghế hay không
-    public boolean hasAvailableSeat(){
-        for (int i = 0; i < seats.size(); i++){
-            Seat seat = seats.get(i);
-            if(seat.isAvailable()){
-                return true;
-            }
-        }
-        return false;
-    }
+        String movieName =
+                movie != null
+                        ? movie.getTitle()
+                        : "Không có";
 
-    // kiểm tra xem phim đó có tồn tại hay không
-    public boolean isAvailableForBooking(){
-        return movie != null && movie.isNowShowing();
-    }
+        String roomName =
+                cinemaRoom != null
+                        ? cinemaRoom.getName()
+                        : "Không có";
 
+        return String.format(
+                "ID: %-5s | Phim: %-25s | Phòng: %-10s | " +
+                        "Bắt đầu: %s | Kết thúc: %s",
+                id,
+                movieName,
+                roomName,
+                startTime.format(formatter),
+                endTime.format(formatter)
+        );
+    }
 }

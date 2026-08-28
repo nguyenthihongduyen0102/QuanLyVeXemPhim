@@ -1,31 +1,26 @@
 package model;
 
 public class Seat {
-    private String seatId; // mã ghế
-    private String seatNumber; // số ghế
-    private SeatType seatType; // loại ghế
-    private SeatStatus seatStatus; // trạng thái ghế
+    private String seatCode;
+    private String seatNumber;
+    private SeatType typeOfSeat;
+    private SeatStatus seatStatus;
+    private String roomId;
 
-    public Seat(){
-
-    }
-
-    public Seat(String seatId,
-                String seatNumber,
-                SeatType seatType,
-                SeatStatus seatStatus) {
-        this.seatId = seatId;
+    public Seat(String seatCode, String seatNumber, SeatType typeOfSeat, SeatStatus seatStatus,String roomId) {
+        this.seatCode = seatCode;
         this.seatNumber = seatNumber;
-        this.seatType = seatType;
-        this.seatStatus = seatStatus;
+        this.typeOfSeat = typeOfSeat;
+        this.seatStatus = SeatStatus.Available;
+        this.roomId = roomId;
     }
 
-    public String getSeatId() {
-        return seatId;
+    public String getSeatCode() {
+        return seatCode;
     }
 
-    public void setSeatId(String seatId) {
-        this.seatId = seatId;
+    public void setSeatCode(String seatCode) {
+        this.seatCode = seatCode;
     }
 
     public String getSeatNumber() {
@@ -36,12 +31,12 @@ public class Seat {
         this.seatNumber = seatNumber;
     }
 
-    public SeatType getSeatType() {
-        return seatType;
+    public SeatType getTypeOfSeat() {
+        return typeOfSeat;
     }
 
-    public void setSeatType(SeatType seatType) {
-        this.seatType = seatType;
+    public void setTypeOfSeat(SeatType typeOfSeat) {
+        this.typeOfSeat = typeOfSeat;
     }
 
     public SeatStatus getSeatStatus() {
@@ -52,8 +47,21 @@ public class Seat {
         this.seatStatus = seatStatus;
     }
 
-    public boolean isAvailable(){
-        return seatStatus == SeatStatus.AVAILABLE;
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+    public void bookASeat(){
+        if(this.seatStatus == SeatStatus.Booked){
+            throw new IllegalStateException("Loi du lieu: Ghe so: "+ seatNumber + "da co nguoi dat!!");
+        }
+        this.seatStatus = SeatStatus.Booked;
+    }
+    public double getSurcharge(){
+        return this.typeOfSeat != null ? this.typeOfSeat.getSurcharge() : 0.0;
     }
 
 }

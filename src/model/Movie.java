@@ -1,81 +1,101 @@
 package model;
 
 public class Movie {
-    private String movieId; //mã phim
-    private String title; // tên phim
-    private String genre; // thể loại
-    private int duration; // thời lượng phim
-    private int ageLimit; // độ tuổi cho phép
-    private MovieStatus status; // trạng thái phim
 
-    public Movie(){
+    private String id;
+    private String title;
+    private int duration;
+    private String genre;
+    private String ageRestriction;
+    private String status;
 
-    }
-
-    public Movie(String movieId,
+    public Movie(String id,
                  String title,
-                 String genre,
                  int duration,
-                 int ageLimit,
-                 MovieStatus status) {
-        this.movieId = movieId;
+                 String genre,
+                 String ageRestriction,
+                 String status) {
+
+        this.id = id;
         this.title = title;
-        this.genre = genre;
         this.duration = duration;
-        this.ageLimit = ageLimit;
+        this.genre = genre;
+        this.ageRestriction = ageRestriction;
         this.status = status;
     }
 
-    public String getMovieId() {
-        return movieId;
-    }
+    // =========================
+    // GETTER
+    // =========================
 
-    public void setMovieId(String movieId) {
-        this.movieId = movieId;
+    public String getId() {
+        return id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public int getDuration() {
+        return duration;
     }
 
     public String getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public String getAgeRestriction() {
+        return ageRestriction;
     }
 
-    public int getDuration() {
-        return duration;
+    public String getStatus() {
+        return status;
+    }
+
+    // =========================
+    // SETTER
+    // =========================
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setDuration(int duration) {
         this.duration = duration;
     }
 
-    public int getAgeLimit() {
-        return ageLimit;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
-    public void setAgeLimit(int ageLimit) {
-        this.ageLimit = ageLimit;
+    public void setAgeRestriction(String ageRestriction) {
+        this.ageRestriction = ageRestriction;
     }
 
-    public MovieStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(MovieStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public boolean isNowShowing(){
-        return status == MovieStatus.NOW_SHOWING;
+    // =========================
+    // TO STRING
+    // =========================
+
+    @Override
+    public String toString() {
+
+        return String.format(
+                "ID: %-5s | Tên: %-25s | Thời lượng: %3d phút | " +
+                        "Thể loại: %-12s | Độ tuổi: %-5s | Trạng thái: %s",
+                id,
+                title,
+                duration,
+                genre,
+                ageRestriction,
+                status
+        );
     }
 }
-
