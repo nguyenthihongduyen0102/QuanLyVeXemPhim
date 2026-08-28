@@ -5,4 +5,3 @@ public enum CustomerType {
     STUDENT,
     VIP
 }
-//
