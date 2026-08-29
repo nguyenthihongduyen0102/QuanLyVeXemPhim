@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class ShowtimeRepository {
     private final Gson gson;
     private final MovieRepository movieRepository;
     private final CinemaRoomRepository cinemaRoomRepository;
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     public ShowtimeRepository(MovieRepository movieRepository, CinemaRoomRepository cinemaRoomRepository) {
         this.gson = new GsonBuilder().setPrettyPrinting().create();
@@ -57,6 +59,8 @@ public class ShowtimeRepository {
             if (!element.isJsonArray()) return showtimes;
 
             JsonArray jsonArray = element.getAsJsonArray();
+            LocalDate today = LocalDate.now();
+
             for (JsonElement item : jsonArray) {
                 JsonObject obj = item.getAsJsonObject();
 
@@ -66,14 +70,13 @@ public class ShowtimeRepository {
                 String startTimeStr = obj.has("startTime") ? obj.get("startTime").getAsString() : "00:00";
                 String endTimeStr = obj.has("endTime") ? obj.get("endTime").getAsString() : "00:00";
 
-                // Ánh xạ đối tượng Movie và CinemaRoom từ Repository tương ứng
+                // Tìm Movie và CinemaRoom tương ứng từ Repository
                 Movie movie = movieRepository.findById(movieId);
                 CinemaRoom room = cinemaRoomRepository.findByName(roomName);
 
-                // Chuyển chuỗi giờ "HH:mm" thành LocalDateTime (mặc định lấy ngày hôm nay)
-                LocalDate today = LocalDate.now();
-                LocalDateTime startDateTime = LocalDateTime.of(today, LocalTime.parse(startTimeStr));
-                LocalDateTime endDateTime = LocalDateTime.of(today, LocalTime.parse(endTimeStr));
+                // Ghép giờ HH:mm với ngày hiện tại để tạo LocalDateTime
+                LocalDateTime startDateTime = LocalDateTime.of(today, LocalTime.parse(startTimeStr, timeFormatter));
+                LocalDateTime endDateTime = LocalDateTime.of(today, LocalTime.parse(endTimeStr, timeFormatter));
 
                 Showtime showtime = new Showtime(id, movie, room, startDateTime, endDateTime);
                 showtimes.add(showtime);
@@ -81,7 +84,7 @@ public class ShowtimeRepository {
         } catch (IOException e) {
             System.out.println("Lỗi đọc file showtimes.json: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Lỗi ép kiểu dữ liệu suất chiếu: " + e.getMessage());
+            System.out.println("Lỗi xử lý dữ liệu suất chiếu: " + e.getMessage());
         }
 
         return showtimes;
@@ -97,8 +100,8 @@ public class ShowtimeRepository {
             obj.addProperty("movieId", (st.getMovie() != null) ? st.getMovie().getId() : "");
             obj.addProperty("roomName", (st.getCinemaRoom() != null) ? st.getCinemaRoom().getName() : "");
 
-            String startStr = (st.getStartTime() != null) ? st.getStartTime().toLocalTime().toString() : "00:00";
-            String endStr = (st.getEndTime() != null) ? st.getEndTime().toLocalTime().toString() : "00:00";
+            String startStr = (st.getStartTime() != null) ? st.getStartTime().format(timeFormatter) : "00:00";
+            String endStr = (st.getEndTime() != null) ? st.getEndTime().format(timeFormatter) : "00:00";
 
             obj.addProperty("startTime", startStr);
             obj.addProperty("endTime", endStr);

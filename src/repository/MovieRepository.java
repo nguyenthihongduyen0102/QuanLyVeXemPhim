@@ -20,7 +20,12 @@ public class MovieRepository {
     private final Gson gson;
 
     public MovieRepository() {
-        this.gson = new GsonBuilder().setPrettyPrinting().create();
+        this.gson = new GsonBuilder()
+                .setFieldNamingStrategy(field ->
+                        field.getName().equals("ageRestriction") ? "ageRating" : field.getName()
+                )
+                .setPrettyPrinting()
+                .create();
 
         File file = new File(file_json);
         try {
@@ -74,6 +79,15 @@ public class MovieRepository {
         List<Movie> result = new ArrayList<>();
         for (Movie m : findAll()) {
             if (m.getGenre() != null && m.getGenre().equalsIgnoreCase(genre)) {
+                result.add(m);
+            }
+        }
+        return result;
+    }
+    public List<Movie> findNowShowing() {
+        List<Movie> result = new ArrayList<>();
+        for (Movie m : findAll()) {
+            if (m.getStatus() != null && m.getStatus().equalsIgnoreCase("Đang chiếu")) {
                 result.add(m);
             }
         }
