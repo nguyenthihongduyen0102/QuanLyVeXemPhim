@@ -1,84 +1,85 @@
 package repository;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import model.Customer;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerRepository {
+    private final String file_json = "customers.json";
+    private final Gson gson;
 
-    private ArrayList<Customer> customers = new ArrayList<>();
+    public CustomerRepository() {
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public void addCustomer(Customer customer) {
-
-        if (customer == null) {
-            throw new IllegalArgumentException(
-                    "Khách hàng không hợp lệ"
-            );
+        File file = new File(file_json);
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                saveAll(new ArrayList<>());
+            }
+        } catch (IOException e) {
+            System.out.println("Lỗi khi tạo file customers.json: " + e.getMessage());
         }
-
-        if (customer.getId() == null ||
-                customer.getId().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Mã khách hàng không hợp lệ"
-            );
-        }
-
-        if (findById(customer.getId()) != null) {
-            throw new IllegalArgumentException(
-                    "Mã khách hàng đã tồn tại"
-            );
-        }
-
-        customers.add(customer);
     }
 
-    public ArrayList<Customer> getAllCustomers() {
-        return new ArrayList<>(customers);
+    // Đọc file JSON kết hợp BufferedReader
+    public List<Customer> findAll() {
+        File file = new File(file_json);
+        if (!file.exists() || file.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file_json))) {
+            Type listType = new TypeToken<ArrayList<Customer>>() {}.getType();
+            List<Customer> customers = gson.fromJson(br, listType);
+            return (customers != null) ? customers : new ArrayList<>();
+        } catch (IOException e) {
+            System.out.println("Lỗi đọc file customers.json: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    // Ghi file JSON kết hợp BufferedWriter
+    public void saveAll(List<Customer> customers) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_json))) {
+            gson.toJson(customers, bw);
+        } catch (IOException e) {
+            System.out.println("Lỗi ghi file customers.json: " + e.getMessage());
+        }
     }
 
     public Customer findById(String id) {
-
-        if (id == null || id.isEmpty()) {
-            return null;
-        }
-
-        for (Customer customer : customers) {
-
-            if (customer.getId()
-                    .equalsIgnoreCase(id)) {
-                return customer;
+        for (Customer c : findAll()) {
+            if (c.getId() != null && c.getId().equalsIgnoreCase(id)) {
+                return c;
             }
         }
-
         return null;
     }
 
-    public boolean removeCustomer(String id) {
-
-        Customer customer = findById(id);
-
-        if (customer != null) {
-            customers.remove(customer);
-            return true;
+    public Customer findByPhone(String phone) {
+        for (Customer c : findAll()) {
+            if (c.getPhone() != null && c.getPhone().equals(phone)) {
+                return c;
+            }
         }
-
-        return false;
+        return null;
     }
 
-    public void setCustomers(ArrayList<Customer> customers) {
-
-        if (customers == null) {
-            this.customers = new ArrayList<>();
-        } else {
-            this.customers = new ArrayList<>(customers);
-        }
-    }
-
-    public int getCustomerCount() {
-        return customers.size();
-    }
-
-    public boolean isEmpty() {
-        return customers.isEmpty();
+    public void add(Customer customer) {
+        List<Customer> customers = findAll();
+        customers.add(customer);
+        saveAll(customers);
     }
 }
