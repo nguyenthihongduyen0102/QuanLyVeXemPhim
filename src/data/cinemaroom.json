@@ -1,0 +1,27 @@
+[
+  {
+    "id": "CR01",
+    "name": "Phòng 1",
+    "capacity": 100
+  },
+  {
+    "id": "CR02",
+    "name": "Phòng 2",
+    "capacity": 80
+  },
+  {
+    "id": "CR03",
+    "name": "Phòng 3",
+    "capacity": 120
+  },
+  {
+    "id": "CR05",
+    "name": "Phòng 5",
+    "capacity": 90
+  },
+  {
+    "id": "CR10",
+    "name": "Phòng 10",
+    "capacity": 150
+  }
+]
