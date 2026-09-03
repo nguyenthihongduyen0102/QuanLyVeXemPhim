@@ -6,10 +6,18 @@ public class CinemaRoom {
     private String name;
     private int capacity;
 
-    public CinemaRoom(String id,
-                      String name,
-                      int capacity) {
+    // =========================
+    // CONSTRUCTOR RỖNG
+    // =========================
 
+    public CinemaRoom() {
+    }
+
+    // =========================
+    // CONSTRUCTOR ĐẦY ĐỦ
+    // =========================
+
+    public CinemaRoom(String id, String name, int capacity) {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
