@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HỆ THỐNG ĐẶT VÉ XEM PHIM CHO SINH VIÊN</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+        .movie-card { background: #1a1c23; border: 1px solid #333; padding: 15px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .seat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 400px; margin: 15px auto; }
+        .seat-item { padding: 10px; background-color: #2ecc71; color: #fff; text-align: center; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.85rem; }
+        .seat-item.vip { background-color: #9b59b6; }
+        .seat-item.double { background-color: #e67e22; }
+        .seat-item.selected { background-color: #f1c40f !important; color: #000; }
+        .seat-item.booked { background-color: #e74c3c !important; cursor: not-allowed; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>🎬 HỆ THỐNG ĐẶT VÉ XEM PHIM </h1>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- 1. THÔNG TIN KHÁCH HÀNG -->
+    <section id="customer-section" style="background: #1a1c23; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h2>👤 Thông Tin Khách Hàng</h2>
+
+        <form id="customer-form" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <!-- MÃ KHÁCH HÀNG CHẠY NGẦM -->
+            <input type="hidden" id="customer-id" value="C001">
+
+            <div class="form-group">
+                <label>Họ và Tên:</label>
+                <input type="text" id="customer-name" placeholder="Nhập họ và tên..." required>
+            </div>
+            <div class="form-group">
+                <label>Số điện thoại:</label>
+                <input type="text" id="customer-phone" placeholder="Nhập SĐT...">
+            </div>
+            <div class="form-group">
+                <label>Loại Khách Hàng:</label>
+                <select id="customer-type" onchange="updateCalculation()">
+                    <option value="NORMAL">Khách Thường (NORMAL - Giá 100%)</option>
+                    <option value="STUDENT">Sinh Viên (STUDENT - Giảm 10%)</option>
+                    <option value="VIP">Thành Viên VIP (VIP - Giảm 20%)</option>
+                </select>
+            </div>
+        </form>
+    </section>
+
+    <!-- 2. DANH SÁCH PHIM VÀ SUẤT CHIẾU -->
+    <section id="movie-section">
+        <h2>🎞️ Danh Sách Phim</h2>
+        <div id="movieList" class="movie-grid">
+
+            <!-- PHIM 1 -->
+            <div class="movie-card" id="card-M001">
+                <div>
+                    <h3>Avengers: Endgame</h3>
+                    <p><strong>Thể loại:</strong> Hành động</p>
+                    <p><strong>Trạng thái:</strong> <span style="color: #2ecc71;">Đang chiếu</span></p>
+
+                    <div class="form-group" style="text-align: left; margin-top: 10px;">
+                        <label>⏰ Chọn suất chiếu:</label>
+                        <select id="showtime-M001">
+                            <option value="ST001|08:00 - 11:01|Phòng 1">08:00 - 11:01 (Phòng 1)</option>
+                            <option value="ST002|14:00 - 17:01|Phòng 2">14:00 - 17:01 (Phòng 2)</option>
+                            <option value="ST003|19:30 - 22:31|Phòng 1">19:30 - 22:31 (Phòng 1)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="selectMovie('M001', 'Avengers: Endgame', 'showtime-M001', 90000, true)">🎬 Chọn Phim</button>
+            </div>
+
+            <!-- PHIM 2 -->
+            <div class="movie-card" id="card-M002">
+                <div>
+                    <h3>Spider-Man: No Way Home</h3>
+                    <p><strong>Thể loại:</strong> Hành động</p>
+                    <p><strong>Trạng thái:</strong> <span style="color: #2ecc71;">Đang chiếu</span></p>
+
+                    <div class="form-group" style="text-align: left; margin-top: 10px;">
+                        <label>⏰ Chọn suất chiếu:</label>
+                        <select id="showtime-M002">
+                            <option value="ST004|18:00 - 20:28|Phòng 3">18:00 - 20:28 (Phòng 3)</option>
+                            <option value="ST005|21:00 - 23:28|Phòng 2">21:00 - 23:28 (Phòng 2)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="selectMovie('M002', 'Spider-Man: No Way Home', 'showtime-M002', 95000, true)">🎬 Chọn Phim</button>
+            </div>
+
+            <!-- PHIM 3 -->
+            <div class="movie-card" id="card-M003">
+                <div>
+                    <h3>Frozen II</h3>
+                    <p><strong>Thể loại:</strong> Hoạt hình</p>
+                    <p><strong>Trạng thái:</strong> <span style="color: #2ecc71;">Đang chiếu</span></p>
+
+                    <div class="form-group" style="text-align: left; margin-top: 10px;">
+                        <label>⏰ Chọn suất chiếu:</label>
+                        <select id="showtime-M003">
+                            <option value="ST006|09:30 - 11:13|Phòng 4">09:30 - 11:13 (Phòng 4)</option>
+                            <option value="ST007|15:00 - 16:43|Phòng 4">15:00 - 16:43 (Phòng 4)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="selectMovie('M003', 'Frozen II', 'showtime-M003', 85000, true)">🎬 Chọn Phim</button>
+            </div>
+
+            <!-- PHIM 4 -->
+            <div class="movie-card" id="card-M004">
+                <div>
+                    <h3>Conan Movie 27</h3>
+                    <p><strong>Thể loại:</strong> Bí ẩn</p>
+                    <p><strong>Trạng thái:</strong> <span style="color: #2ecc71;">Đang chiếu</span></p>
+
+                    <div class="form-group" style="text-align: left; margin-top: 10px;">
+                        <label>⏰ Chọn suất chiếu:</label>
+                        <select id="showtime-M004">
+                            <option value="ST008|13:00 - 14:51|Phòng 1">13:00 - 14:51 (Phòng 1)</option>
+                            <option value="ST009|18:00 - 19:51|Phòng 2">18:00 - 19:51 (Phòng 2)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="selectMovie('M004', 'Conan Movie 27', 'showtime-M004', 65000, true)">🎬 Chọn Phim</button>
+            </div>
+
+            <!-- PHIM 5 (NGỪNG CHIẾU) -->
+            <div class="movie-card" id="card-M005" style="opacity: 0.5;">
+                <div>
+                    <h3>Inside Out</h3>
+                    <p><strong>Thể loại:</strong> Hoạt hình</p>
+                    <p><strong>Trạng thái:</strong> <span style="color: #e74c3c;">Ngừng chiếu</span></p>
+
+                    <div class="form-group" style="text-align: left; margin-top: 10px;">
+                        <label>⏰ Chọn suất chiếu:</label>
+                        <select id="showtime-M005" disabled>
+                            <option value="">-- Hết suất chiếu --</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" style="background: #555;" onclick="selectMovie('M005', 'Inside Out', 'showtime-M005', 100000, false)">🚫 Chọn Phim</button>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<!-- 3. MODAL CHỌN GHẾ VÀ THANH TOÁN -->
+<div id="booking-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <h2 id="modal-movie-title" style="color: #ffeb3b;">Đặt Vé Phim</h2>
+        <p id="modal-showtime" style="color: #3498db; font-weight: bold; margin-bottom: 10px;"></p>
+
+        <!-- CHỌN GHẾ -->
+        <div>
+            <h3>💺 Chọn Ghế </h3>
+            <div style="font-size: 0.8rem; color: #aaa; text-align: center; margin-bottom: 8px;">
+                🟢 Thường | 🟣 VIP | 🟠 Đôi  | 🔴 Đã đặt
+            </div>
+
+            <div id="layoutGhe" class="seat-grid">
+                <div class="seat-item" id="seat-A01" onclick="toggleSeat(this, 'A01', 0)">A01</div>
+                <div class="seat-item" id="seat-A02" onclick="toggleSeat(this, 'A02', 0)">A02</div>
+                <div class="seat-item booked">A03</div>
+                <div class="seat-item" id="seat-A04" onclick="toggleSeat(this, 'A04', 0)">A04</div>
+                <div class="seat-item" id="seat-A05" onclick="toggleSeat(this, 'A05', 0)">A05</div>
+
+                <div class="seat-item vip" id="seat-VIP01" onclick="toggleSeat(this, 'VIP01', 20000)">VIP01</div>
+                <div class="seat-item vip" id="seat-VIP02" onclick="toggleSeat(this, 'VIP02', 20000)">VIP02</div>
+                <div class="seat-item vip booked">VIP03</div>
+                <div class="seat-item vip" id="seat-VIP04" onclick="toggleSeat(this, 'VIP04', 20000)">VIP04</div>
+
+                <div class="seat-item double" id="seat-COUPLE01" onclick="toggleSeat(this, 'COUPLE01', 40000)" style="grid-column: span 2;">COUPLE01 (Đôi)</div>
+            </div>
+        </div>
+
+        <!-- CHỌN HÌNH THỨC THANH TOÁN -->
+        <div class="form-group" style="margin-top: 15px;">
+            <label for="payment-method">💳 Hình Thức Thanh Toán:</label>
+            <select id="payment-method">
+                <option value="💵 Tiền mặt (CashPayment)">💵 Tiền mặt </option>
+                <option value="🏦 Chuyển khoản (BankTransferPayment)">🏦 Chuyển khoản </option>
+                <option value="📱 Ví điện tử (EWalletPayment)">📱 Ví điện tử </option>
+            </select>
+        </div>
+
+        <!-- BẢNG TÍNH TIỀN -->
+        <div style="background: #2c2f38; padding: 12px; border-radius: 5px; margin: 15px 0;">
+            <p>Khách hàng: <strong id="summary-customer-name" style="color: #3498db;">-</strong></p>
+            <p>Suất chiếu: <strong id="summary-showtime" style="color: #2ecc71;">-</strong></p>
+            <p>Ghế đã chọn: <strong id="selected-seat" style="color: #f1c40f;">Chưa chọn</strong></p>
+            <p>Giá vé cơ bản: <strong id="ticket-price">0 VNĐ</strong></p>
+            <p>Giảm giá đối tượng: <strong id="discount" style="color: #e74c3c;">0 VNĐ</strong></p>
+            <p style="font-size: 1.1rem; border-top: 1px solid #444; padding-top: 5px; margin-top: 5px;">
+                Tổng thanh toán: <strong id="total-price" style="color: #2ecc71;">0 VNĐ</strong>
+            </p>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-primary" onclick="processPayment()">Xác Nhận Thanh Toán</button>
+            <button class="btn-cancel" onclick="closeBookingModal()">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentMovie = null;
+    let selectedSeats = [];
+
+    function resetSeatSelection() {
+        selectedSeats = [];
+        document.querySelectorAll('.seat-item').forEach(el => el.classList.remove('selected'));
+    }
+
+    function selectMovie(id, title, showtimeSelectId, basePrice, isActive) {
+        if (!isActive) {
+            alert("❌ Phim [" + title + "] đã NGỪNG CHIẾU!");
+            return;
+        }
+
+        const name = document.getElementById("customer-name").value.trim();
+        if (!name) {
+            alert("⚠️ Vui lòng nhập họ và tên khách hàng trước khi chọn phim!");
+            document.getElementById("customer-name").focus();
+            return;
+        }
+
+        const showtimeVal = document.getElementById(showtimeSelectId).value;
+        const [stId, timeStr, room] = showtimeVal.split('|');
+
+        currentMovie = { id, title, stId, showtime: timeStr, room, basePrice };
+        document.getElementById("modal-movie-title").innerText = title;
+        document.getElementById("modal-showtime").innerText = "⏰ " + timeStr + " (" + room + ") | Giá gốc: " + basePrice.toLocaleString('vi-VN') + " VNĐ";
+        document.getElementById("summary-customer-name").innerText = name + " (" + document.getElementById("customer-type").value + ")";
+        document.getElementById("summary-showtime").innerText = timeStr + " - " + room;
+
+        resetSeatSelection();
+        document.getElementById("booking-modal").style.display = "flex";
+    }
+
+    function toggleSeat(element, seatCode, surcharge) {
+        if (element.classList.contains("booked")) return;
+
+        const idx = selectedSeats.findIndex(s => s.code === seatCode);
+        if (idx > -1) {
+            selectedSeats.splice(idx, 1);
+            element.classList.remove("selected");
+        } else {
+            selectedSeats.push({ code: seatCode, surcharge: surcharge });
+            element.classList.add("selected");
+        }
+        updateCalculation();
+    }
+
+    function updateCalculation() {
+        if (!currentMovie) return;
+
+        const type = document.getElementById("customer-type").value;
+        let discountRate = 0;
+        if (type === "STUDENT") discountRate = 0.10;
+        else if (type === "VIP") discountRate = 0.20;
+
+        let totalRaw = 0;
+        selectedSeats.forEach(s => {
+            totalRaw += (currentMovie.basePrice + s.surcharge);
+        });
+
+        const discount = totalRaw * discountRate;
+        const finalTotal = totalRaw - discount;
+
+        document.getElementById("selected-seat").innerText = selectedSeats.map(s => s.code).join(", ") || "Chưa chọn";
+        document.getElementById("ticket-price").innerText = totalRaw.toLocaleString('vi-VN') + " VNĐ";
+        document.getElementById("discount").innerText = discount.toLocaleString('vi-VN') + " VNĐ (" + (discountRate * 100) + "%)";
+        document.getElementById("total-price").innerText = finalTotal.toLocaleString('vi-VN') + " VNĐ";
+    }
+
+    function closeBookingModal() {
+        document.getElementById("booking-modal").style.display = "none";
+    }
+
+    function processPayment() {
+        if (selectedSeats.length === 0) {
+            alert("⚠️ Vui lòng chọn ít nhất 1 ghế!");
+            return;
+        }
+
+        const customerName = document.getElementById("customer-name").value;
+        const paymentMethod = document.getElementById("payment-method").value;
+        const total = document.getElementById("total-price").innerText;
+
+        alert("🎉 ĐẶT VÉ THANH TOÁN THÀNH CÔNG!\n- Tên khách hàng: " + customerName + "\n- Phim: " + currentMovie.title + "\n- Suất chiếu: " + currentMovie.showtime + " (" + currentMovie.room + ")\n- Ghế: " + selectedSeats.map(s => s.code).join(", ") + "\n- Hình thức: " + paymentMethod + "\n- Tổng thanh toán: " + total);
+
+        closeBookingModal();
+    }
+</script>
+</body>
+</html>
