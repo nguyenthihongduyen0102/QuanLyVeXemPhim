@@ -2,7 +2,7 @@ package policy;
 
 import model.Seat;
 
-public class VIPPricePolicy implements TicketPricePolicy {
+public class VipPricePolicy implements TicketPricePolicy {
     @Override
     public double FinalTicketPrice(Seat seat, double baseFare) {
         double Sum = baseFare + seat.getSurcharge();
