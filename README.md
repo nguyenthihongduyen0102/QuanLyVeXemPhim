@@ -4,7 +4,7 @@ Bài tập lớn OOP — Nhóm 06. Web đặt vé xem phim: chọn phim, chọn 
 
 ## 1. Chạy Frontend
 
-Frontend chạy tại `https://nguyenthihongduyen0102.github.io/QuanLyVeXemPhim/frontend/`. Mở link này bằng trình duyệt để dùng web.
+Frontend chạy tại [https://nguyenthihongduyen0102.github.io/QuanLyVeXemPhim/frontend/](https://nguyenthihongduyen0102.github.io/QuanLyVeXemPhim/frontend/). Mở link này bằng trình duyệt để dùng web.
 
 ## 2. Tài khoản đăng nhập thử (demo)
 
@@ -25,3 +25,7 @@ Hoặc bấm nút **Đăng ký** để tạo tài khoản mới.
 2. Ở trang chủ, chọn 1 phim đang chiếu.
 3. Chọn suất chiếu → chọn ghế trống → bấm **Đặt vé**.
 4. Bấm **Thanh toán**, chọn phương thức (Tiền mặt / Chuyển khoản / Ví điện tử) → thanh toán.
+
+## 4. Class Diagrams
+Đường link: [https://mermaid.ai/d/4772ad1e-6ecf-40a0-9236-6cc33dac2753](https://mermaid.ai/d/4772ad1e-6ecf-40a0-9236-6cc33dac2753)
+
