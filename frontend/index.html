@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ĐẶT VÉ XEM PHIM</title>
+    <title>ĐẶT VÉ XEM PHIM </title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         .auth-container { max-width: 450px; margin: 40px auto; background: #1a1c23; padding: 25px; border-radius: 8px; border: 1px solid #333; }
         .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
         .movie-card { background: #1a1c23; border: 1px solid #333; padding: 15px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
-        .movie-poster { width: 100%; height: 280px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; background-color: #222; }
         .seat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 400px; margin: 15px auto; }
         .seat-item { padding: 10px; background-color: #2ecc71; color: #fff; text-align: center; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.85rem; }
         .seat-item.vip { background-color: #9b59b6; }
-        .seat-item.double { background-color: #e67e22; }
+        .seat-item.double { background-color: #e67e22; grid-column: span 2; }
         .seat-item.selected { background-color: #f1c40f !important; color: #000; }
-        .seat-item.booked { background-color: #e74c3c !important; cursor: not-allowed; }
+        .seat-item.booked { background-color: #e74c3c !important; cursor: not-allowed; opacity: 0.6; }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
         .form-group input, .form-group select { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; box-sizing: border-box; }
@@ -26,13 +25,20 @@
         .ticket-receipt { background: #11141a; border: 1px dashed #2ecc71; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: left; }
         .ticket-receipt p { margin: 6px 0; border-bottom: 1px solid #222; padding-bottom: 4px; font-size: 0.95rem; }
         .ticket-receipt p strong { color: #f1c40f; }
+        .movie-poster {
+            width: 100%;
+            height: 300px; /* Cố định chiều cao phù hợp */
+            object-fit: cover; /* Giữ tỉ lệ ảnh và cắt gọn vừa khung */
+            border-radius: 6px;
+            display: block;
+        }
     </style>
 </head>
 <body>
 
 <header>
     <div class="container">
-        <h1>🎬 HỆ THỐNG ĐẶT VÉ XEM PHIM </h1>
+        <h1>🎬 HỆ THỐNG ĐẶT VÉ XEM PHIM</h1>
     </div>
 </header>
 
@@ -49,11 +55,11 @@
         <form id="form-login" onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label>Email đăng nhập:</label>
-                <input type="email" id="login-email" required>
+                <input type="email" id="login-email" placeholder="nguyenanh.duong@gmail.com" required>
             </div>
             <div class="form-group">
                 <label>Mật khẩu:</label>
-                <input type="password" id="login-pass" required>
+                <input type="password" id="login-pass" placeholder="Password123!" required>
             </div>
             <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Đăng Nhập</button>
 
@@ -62,7 +68,7 @@
                 <ul style="margin: 5px 0 0 15px; padding: 0;">
                     <li><code>nguyenanh.duong@gmail.com</code> (STUDENT)</li>
                     <li><code>binh.tran@student.edu.vn</code> (STUDENT)</li>
-                    <li><code>cuong.vip@gmail.com</code> (VIP)</li>
+                    <li><code>cuong.vip@gmail.com</code> (VIP -20%)</li>
                     <li><code>tuan.hoang@gmail.com</code> (NORMAL)</li>
                 </ul>
             </div>
@@ -105,7 +111,7 @@
         <div class="user-info-bar">
             <div>
                 Xin chào: <strong id="user-display-name" style="color: #f1c40f;">-</strong>
-                | Mã KH: <span id="user-display-id" style="color: #e74c3c; font-weight: bold;">-</span>
+                | Mã khách hàng: <span id="user-display-id" style="color: #e74c3c; font-weight: bold;">-</span>
                 | SĐT: <span id="user-display-phone" style="color: #3498db;">-</span>
                 | Email: <span id="user-display-email" style="color: #aaa;">-</span>
                 | Phân loại: <span id="user-display-type" style="color: #2ecc71; font-weight: bold;">-</span>
@@ -122,7 +128,7 @@
                 <div class="movie-card" id="card-M001">
                     <div>
                         <img src="https://cdn-images.vtv.vn/2019/4/26/poster-payoff-1-1556273680151870157160-crop-1556273779257196175768.jpg" onerror="this.src='https://via.placeholder.com/220x280?text=Avengers+Endgame'" alt="Avengers: Endgame" class="movie-poster">
-                        <h3 style="margin: 8px 0;">Avengers: Endgame</h3>
+                        <h3 style="margin: 8px 0; color: #f1c40f;">Avengers: Endgame</h3>
                         <p><strong>Thể loại:</strong> Hành động</p>
                         <p><strong>Trạng thái:</strong> <span style="color: #2ecc71;">Đang chiếu</span></p>
 
@@ -142,7 +148,7 @@
                 <div class="movie-card" id="card-M002">
                     <div>
                         <img src="https://static-cgv.vncdn.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/s/n/snwh_new_fb1080x1350_1_.jpg" onerror="this.src='https://via.placeholder.com/220x280?text=Spider-Man'" alt="Spider-Man: No Way Home" class="movie-poster">
-                        <h3 style="margin: 8px 0;">Spider-Man: No Way Home</h3>
+                        <h3 style="margin: 8px 0; color: #f1c40f;">Spider-Man: No Way Home</h3>
                         <p><strong>Thể loại:</strong> Hành động</p>
                         <p><strong>Trạng thái:</strong> <span style="color: #2ecc71;">Đang chiếu</span></p>
 
@@ -161,7 +167,7 @@
                 <div class="movie-card" id="card-M003">
                     <div>
                         <img src="https://static-cgv.vncdn.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/p/o/poster_frozen_nhbg_-final_1_.jpg" onerror="this.src='https://via.placeholder.com/220x280?text=Frozen+2'" alt="Frozen II" class="movie-poster">
-                        <h3 style="margin: 8px 0;">Frozen II</h3>
+                        <h3 style="margin: 8px 0; color: #f1c40f;">Frozen II</h3>
                         <p><strong>Thể loại:</strong> Hoạt hình</p>
                         <p><strong>Trạng thái:</strong> <span style="color: #2ecc71;">Đang chiếu</span></p>
 
@@ -180,7 +186,7 @@
                 <div class="movie-card" id="card-M004">
                     <div>
                         <img src="https://upload.wikimedia.org/wikipedia/vi/9/9d/Conan_Movie_27.jpg?utm_source=vi.wikipedia.org&utm_campaign=index&utm_content=original" onerror="this.src='https://via.placeholder.com/220x280?text=Conan+27'" alt="Conan Movie 27" class="movie-poster">
-                        <h3 style="margin: 8px 0;">Conan Movie 27</h3>
+                        <h3 style="margin: 8px 0; color: #f1c40f;">Conan Movie 27</h3>
                         <p><strong>Thể loại:</strong> Bí ẩn</p>
                         <p><strong>Trạng thái:</strong> <span style="color: #2ecc71;">Đang chiếu</span></p>
 
@@ -199,7 +205,7 @@
                 <div class="movie-card" id="card-M005" style="opacity: 0.5;">
                     <div>
                         <img src="https://kenh14cdn.com/QuickNewsK14/Common/2015/08/img_201508152202339797.jpg" onerror="this.src='https://via.placeholder.com/220x280?text=Inside+Out'" alt="Inside Out" class="movie-poster" style="filter: grayscale(100%);">
-                        <h3 style="margin: 8px 0;">Inside Out</h3>
+                        <h3 style="margin: 8px 0; color: #aaa;">Inside Out</h3>
                         <p><strong>Thể loại:</strong> Hoạt hình</p>
                         <p><strong>Trạng thái:</strong> <span style="color: #e74c3c;">Ngừng chiếu</span></p>
 
@@ -226,34 +232,21 @@
 
         <!-- CHỌN GHẾ -->
         <div>
-            <h3>💺 Chọn Ghế </h3>
+            <h3>💺 Chọn Ghế Chi Tiết</h3>
             <div style="font-size: 0.8rem; color: #aaa; text-align: center; margin-bottom: 8px;">
                 🟢 Thường | 🟣 VIP (+20k) | 🟠 Đôi (+40k) | 🔴 Đã đặt
             </div>
 
-            <div id="layoutGhe" class="seat-grid">
-                <div class="seat-item" id="seat-A01" onclick="toggleSeat(this, 'A01', 0)">A01</div>
-                <div class="seat-item" id="seat-A02" onclick="toggleSeat(this, 'A02', 0)">A02</div>
-                <div class="seat-item booked">A03</div>
-                <div class="seat-item" id="seat-A04" onclick="toggleSeat(this, 'A04', 0)">A04</div>
-                <div class="seat-item" id="seat-A05" onclick="toggleSeat(this, 'A05', 0)">A05</div>
-
-                <div class="seat-item vip" id="seat-VIP01" onclick="toggleSeat(this, 'VIP01', 20000)">VIP01</div>
-                <div class="seat-item vip" id="seat-VIP02" onclick="toggleSeat(this, 'VIP02', 20000)">VIP02</div>
-                <div class="seat-item vip booked">VIP03</div>
-                <div class="seat-item vip" id="seat-VIP04" onclick="toggleSeat(this, 'VIP04', 20000)">VIP04</div>
-
-                <div class="seat-item double" id="seat-COUPLE01" onclick="toggleSeat(this, 'COUPLE01', 40000)" style="grid-column: span 2;">COUPLE01 (Đôi)</div>
-            </div>
+            <div id="layoutGhe" class="seat-grid"></div>
         </div>
 
         <!-- CHỌN HÌNH THỨC THANH TOÁN -->
         <div class="form-group" style="margin-top: 15px;">
-            <label for="payment-method">Hình Thức Thanh Toán:</label>
+            <label for="payment-method">💳 Hình Thức Thanh Toán:</label>
             <select id="payment-method">
-                <option value="Tiền mặt">Tiền mặt</option>
-                <option value="Chuyển khoản">Chuyển khoản</option>
-                <option value="Ví điện tử">Ví điện tử</option>
+                <option value="💵 Tiền mặt (CashPayment)">💵 Tiền mặt (CashPayment)</option>
+                <option value="🏦 Chuyển khoản (BankTransferPayment)">🏦 Chuyển khoản (BankTransferPayment)</option>
+                <option value="📱 Ví điện tử (EWalletPayment)">📱 Ví điện tử (EWalletPayment)</option>
             </select>
         </div>
 
@@ -300,14 +293,54 @@
 <script>
     const DEFAULT_PASSWORD = "Password123!";
 
-    // MẢNG KHÁCH HÀNG CẬP NHẬT TỪ customers.json
-    const usersDatabase = [
+    const initialUsers = [
         { id: "C001", name: "Nguyen Anh Duong", phone: "0357886148", email: "nguyenanh.duong@gmail.com", type: "STUDENT", pass: DEFAULT_PASSWORD },
         { id: "C002", name: "Tran Thi Binh", phone: "0912345678", email: "binh.tran@student.edu.vn", type: "STUDENT", pass: DEFAULT_PASSWORD },
         { id: "C003", name: "Le Van Cuong", phone: "0923456789", email: "cuong.vip@gmail.com", type: "VIP", pass: DEFAULT_PASSWORD },
         { id: "C004", name: "Pham Minh Dung", phone: "0934567890", email: "dung.pham@student.edu.vn", type: "STUDENT", pass: DEFAULT_PASSWORD },
         { id: "C005", name: "Hoang Anh Tuan", phone: "0945678901", email: "tuan.hoang@gmail.com", type: "NORMAL", pass: DEFAULT_PASSWORD }
     ];
+
+    const seatMasterList = [
+        { code: 'A01', type: 'normal', surcharge: 0 },
+        { code: 'A02', type: 'normal', surcharge: 0 },
+        { code: 'A03', type: 'normal', surcharge: 0 },
+        { code: 'A04', type: 'normal', surcharge: 0 },
+        { code: 'A05', type: 'normal', surcharge: 0 },
+        { code: 'VIP01', type: 'vip', surcharge: 20000 },
+        { code: 'VIP02', type: 'vip', surcharge: 20000 },
+        { code: 'VIP03', type: 'vip', surcharge: 20000 },
+        { code: 'VIP04', type: 'vip', surcharge: 20000 },
+        { code: 'COUPLE01', type: 'double', surcharge: 40000 }
+    ];
+
+    // DÙNG LOCALSTORAGE ĐỂ ĐỒNG BỘ GIỮA CÁC TAB
+    function getUsersDB() {
+        const data = localStorage.getItem('cinestar_users');
+        if (!data) {
+            localStorage.setItem('cinestar_users', JSON.stringify(initialUsers));
+            return initialUsers;
+        }
+        return JSON.parse(data);
+    }
+
+    function saveUsersDB(users) {
+        localStorage.setItem('cinestar_users', JSON.stringify(users));
+    }
+
+    function getBookedSeatsDB() {
+        const data = localStorage.getItem('cinestar_booked_seats');
+        if (!data) {
+            const initBooked = { 'ST001': ['A03', 'VIP03'] };
+            localStorage.setItem('cinestar_booked_seats', JSON.stringify(initBooked));
+            return initBooked;
+        }
+        return JSON.parse(data);
+    }
+
+    function saveBookedSeatsDB(seatsObj) {
+        localStorage.setItem('cinestar_booked_seats', JSON.stringify(seatsObj));
+    }
 
     let currentUser = null;
     let currentMovie = null;
@@ -332,7 +365,10 @@
         const email = document.getElementById('login-email').value.trim();
         const pass = document.getElementById('login-pass').value;
 
-        const user = usersDatabase.find(u => u.email === email && u.pass === pass);
+        // Lấy danh sách tài khoản mới nhất từ localStorage
+        const users = getUsersDB();
+        const user = users.find(u => u.email === email && u.pass === pass);
+
         if (user) {
             currentUser = user;
             showMainApp();
@@ -349,17 +385,20 @@
         const pass = document.getElementById('reg-pass').value;
         const type = document.getElementById('reg-type').value;
 
-        if (usersDatabase.some(u => u.email === email)) {
+        const users = getUsersDB();
+        if (users.some(u => u.email === email)) {
             alert("⚠️ Email này đã tồn tại trên hệ thống!");
             return;
         }
 
-        const nextId = "C" + String(usersDatabase.length + 1).padStart(3, '0');
-
+        const nextId = "C" + String(users.length + 1).padStart(3, '0');
         const newUser = { id: nextId, name, phone, email, type, pass };
-        usersDatabase.push(newUser);
+
+        users.push(newUser);
+        saveUsersDB(users); // Lưu vào localStorage để các Tab cùng đọc được
+
         currentUser = newUser;
-        alert("🎉 Đăng ký tài khoản thành công!");
+        alert("🎉 Đăng ký tài khoản thành công! Mã KH của bạn là: " + nextId);
         showMainApp();
     }
 
@@ -372,9 +411,9 @@
         document.getElementById('user-display-phone').innerText = currentUser.phone;
         document.getElementById('user-display-email').innerText = currentUser.email;
 
-        let typeLabel = "Khách Thường";
-        if (currentUser.type === "STUDENT") typeLabel = "Sinh Viên";
-        else if (currentUser.type === "VIP") typeLabel = "Thành Viên VIP";
+        let typeLabel = "Khách Thường (NORMAL)";
+        if (currentUser.type === "STUDENT") typeLabel = "Sinh Viên (STUDENT - Giảm 10%)";
+        else if (currentUser.type === "VIP") typeLabel = "Thành Viên VIP (VIP - Giảm 20%)";
         document.getElementById('user-display-type').innerText = typeLabel;
     }
 
@@ -388,7 +427,38 @@
 
     function resetSeatSelection() {
         selectedSeats = [];
-        document.querySelectorAll('.seat-item').forEach(el => el.classList.remove('selected'));
+        updateCalculation();
+    }
+
+    function renderSeats(stId) {
+        const layout = document.getElementById("layoutGhe");
+        layout.innerHTML = "";
+
+        const bookedSeatsObj = getBookedSeatsDB();
+        const bookedInThisShowtime = bookedSeatsObj[stId] || [];
+
+        seatMasterList.forEach(s => {
+            const div = document.createElement("div");
+            div.id = `seat-${s.code}`;
+
+            let classes = ["seat-item"];
+            if (s.type === "vip") classes.push("vip");
+            if (s.type === "double") classes.push("double");
+
+            const isBooked = bookedInThisShowtime.includes(s.code);
+            if (isBooked) {
+                classes.push("booked");
+                div.innerText = s.code + " (Đã đặt)";
+            } else {
+                div.innerText = s.type === "double" ? `${s.code} (Đôi)` : s.code;
+                div.onclick = function() {
+                    toggleSeat(this, s.code, s.surcharge);
+                };
+            }
+
+            div.className = classes.join(" ");
+            layout.appendChild(div);
+        });
     }
 
     function selectMovie(id, title, showtimeSelectId, basePrice, isActive) {
@@ -407,6 +477,7 @@
         document.getElementById("summary-showtime").innerText = timeStr + " - " + room;
 
         resetSeatSelection();
+        renderSeats(stId);
         document.getElementById("booking-modal").style.display = "flex";
     }
 
@@ -454,6 +525,21 @@
             alert("⚠️ Vui lòng chọn ít nhất 1 ghế!");
             return;
         }
+
+        const stId = currentMovie.stId;
+        const bookedSeatsObj = getBookedSeatsDB();
+
+        if (!bookedSeatsObj[stId]) {
+            bookedSeatsObj[stId] = [];
+        }
+
+        selectedSeats.forEach(s => {
+            if (!bookedSeatsObj[stId].includes(s.code)) {
+                bookedSeatsObj[stId].push(s.code);
+            }
+        });
+
+        saveBookedSeatsDB(bookedSeatsObj); // Lưu danh sách ghế đã đặt vào localStorage
 
         const paymentMethod = document.getElementById("payment-method").value;
         const total = document.getElementById("total-price").innerText;
