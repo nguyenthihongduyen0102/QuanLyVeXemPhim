@@ -27,8 +27,8 @@
         .ticket-receipt p strong { color: #f1c40f; }
         .movie-poster {
             width: 100%;
-            height: 300px; /* Cố định chiều cao phù hợp */
-            object-fit: cover; /* Giữ tỉ lệ ảnh và cắt gọn vừa khung */
+            height: 300px;
+            object-fit: cover;
             border-radius: 6px;
             display: block;
         }
@@ -244,9 +244,9 @@
         <div class="form-group" style="margin-top: 15px;">
             <label for="payment-method">💳 Hình Thức Thanh Toán:</label>
             <select id="payment-method">
-                <option value="💵 Tiền mặt (CashPayment)">💵 Tiền mặt (CashPayment)</option>
-                <option value="🏦 Chuyển khoản (BankTransferPayment)">🏦 Chuyển khoản (BankTransferPayment)</option>
-                <option value="📱 Ví điện tử (EWalletPayment)">📱 Ví điện tử (EWalletPayment)</option>
+                <option value="💵 Tiền mặt">💵 Tiền mặt</option>
+                <option value="🏦 Chuyển khoản">🏦 Chuyển khoản</option>
+                <option value="📱 Ví điện tử">📱 Ví điện tử</option>
             </select>
         </div>
 
@@ -463,7 +463,7 @@
 
     function selectMovie(id, title, showtimeSelectId, basePrice, isActive) {
         if (!isActive) {
-            alert("❌ Phim [" + title + "] đã NGỪNG CHIẾU! Hệ thống không cho phép đặt vé.");
+            alert("❌ Phim [" + title + "] đã NGỪNG CHIẾU!");
             return;
         }
 
